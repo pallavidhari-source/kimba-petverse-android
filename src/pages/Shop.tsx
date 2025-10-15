@@ -1,105 +1,47 @@
 import { Navbar } from "@/components/Navbar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ShoppingCart, Star } from "lucide-react";
+import { CategoryNav } from "@/components/CategoryNav";
+import { SubcategoryNav } from "@/components/SubcategoryNav";
+import { ProductCard } from "@/components/ProductCard";
+import { products } from "@/data/shopData";
+import { useState, useMemo } from "react";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 const Shop = () => {
-  const petProducts = [
-    {
-      id: 1,
-      name: "Pet Bed Deluxe",
-      price: "₹2,499",
-      rating: 4.5,
-      image: "/placeholder.svg",
-      category: "Accessories"
-    },
-    {
-      id: 2,
-      name: "Interactive Toy Set",
-      price: "₹899",
-      rating: 4.8,
-      image: "/placeholder.svg",
-      category: "Toys"
-    },
-    {
-      id: 3,
-      name: "Pet Grooming Kit",
-      price: "₹1,599",
-      rating: 4.6,
-      image: "/placeholder.svg",
-      category: "Grooming"
-    },
-    {
-      id: 4,
-      name: "Travel Carrier",
-      price: "₹3,299",
-      rating: 4.7,
-      image: "/placeholder.svg",
-      category: "Accessories"
-    }
-  ];
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedSubcategory, setSelectedSubcategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const petFood = [
-    {
-      id: 1,
-      name: "Premium Dog Food 10kg",
-      price: "₹2,999",
-      rating: 4.9,
-      image: "/placeholder.svg",
-      category: "Dog Food"
-    },
-    {
-      id: 2,
-      name: "Cat Food Variety Pack",
-      price: "₹1,499",
-      rating: 4.7,
-      image: "/placeholder.svg",
-      category: "Cat Food"
-    },
-    {
-      id: 3,
-      name: "Puppy Nutrition 5kg",
-      price: "₹1,899",
-      rating: 4.8,
-      image: "/placeholder.svg",
-      category: "Puppy Food"
-    },
-    {
-      id: 4,
-      name: "Kitten Formula 3kg",
-      price: "₹1,299",
-      rating: 4.6,
-      image: "/placeholder.svg",
-      category: "Kitten Food"
-    }
-  ];
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      // Category filter
+      if (selectedCategory !== "all" && product.category !== selectedCategory) {
+        return false;
+      }
 
-  const ProductCard = ({ product }: { product: any }) => (
-    <Card>
-      <CardHeader>
-        <img 
-          src={product.image} 
-          alt={product.name}
-          className="w-full h-48 object-cover rounded-lg mb-4"
-        />
-        <CardTitle className="text-lg">{product.name}</CardTitle>
-        <CardDescription className="flex items-center gap-1">
-          <Star className="h-4 w-4 fill-accent text-accent" />
-          {product.rating}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold text-primary">{product.price}</div>
-      </CardContent>
-      <CardFooter>
-        <Button className="w-full">
-          <ShoppingCart className="h-4 w-4 mr-2" />
-          Add to Cart
-        </Button>
-      </CardFooter>
-    </Card>
-  );
+      // Subcategory filter
+      if (selectedSubcategory !== "all" && product.subcategory !== selectedSubcategory) {
+        return false;
+      }
+
+      // Search filter
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        return (
+          product.name.toLowerCase().includes(query) ||
+          product.brand.toLowerCase().includes(query) ||
+          product.description.toLowerCase().includes(query)
+        );
+      }
+
+      return true;
+    });
+  }, [selectedCategory, selectedSubcategory, searchQuery]);
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setSelectedSubcategory("all");
+  };
 
   return (
     <div className="min-h-screen">
@@ -118,30 +60,57 @@ const Shop = () => {
         </div>
       </section>
 
-      <section className="py-16">
+      <section className="py-8 border-b bg-card/50 backdrop-blur-sm sticky top-16 z-40">
         <div className="container mx-auto px-4">
-          <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
-              <TabsTrigger value="products">Pet Products</TabsTrigger>
-              <TabsTrigger value="food">Pet Food</TabsTrigger>
-            </TabsList>
+          <CategoryNav
+            selectedCategory={selectedCategory}
+            onCategoryChange={handleCategoryChange}
+          />
+        </div>
+      </section>
+
+      <section className="py-8">
+        <div className="container mx-auto px-4 space-y-6">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <SubcategoryNav
+              selectedCategory={selectedCategory}
+              selectedSubcategory={selectedSubcategory}
+              onSubcategoryChange={setSelectedSubcategory}
+            />
             
-            <TabsContent value="products">
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {petProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="food">
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {petFood.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
+            <div className="relative w-full md:w-80">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">
+              Showing {filteredProducts.length} products
+            </p>
+          </div>
+
+          {filteredProducts.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="text-lg font-semibold text-muted-foreground">
+                No products found
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Try adjusting your filters or search query
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>
