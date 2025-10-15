@@ -1,0 +1,93 @@
+import { Navbar } from "@/components/Navbar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Heart, MapPin, Info } from "lucide-react";
+
+const Adopt = () => {
+  const adoptionPets = [
+    {
+      id: 1,
+      name: "Max",
+      breed: "Golden Retriever",
+      age: "2 years",
+      location: "Banjara Hills",
+      image: "/placeholder.svg",
+      description: "Friendly and well-trained"
+    },
+    {
+      id: 2,
+      name: "Luna",
+      breed: "Persian Cat",
+      age: "1 year",
+      location: "Jubilee Hills",
+      image: "/placeholder.svg",
+      description: "Calm and affectionate"
+    },
+    {
+      id: 3,
+      name: "Rocky",
+      breed: "Labrador",
+      age: "3 years",
+      location: "Hitech City",
+      image: "/placeholder.svg",
+      description: "Energetic and playful"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen">
+      <Navbar />
+      
+      <section className="bg-gradient-hero py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-primary-foreground md:text-5xl mb-4">
+              Adopt a Pet
+            </h1>
+            <p className="text-lg text-primary-foreground/90 max-w-2xl mx-auto">
+              Give a loving home to pets in need. All pets are vaccinated and vet-checked.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {adoptionPets.map((pet) => (
+              <Card key={pet.id}>
+                <CardHeader>
+                  <img 
+                    src={pet.image} 
+                    alt={pet.name}
+                    className="w-full h-48 object-cover rounded-lg mb-4"
+                  />
+                  <CardTitle>{pet.name}</CardTitle>
+                  <CardDescription>{pet.breed} • {pet.age}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                    <MapPin className="h-4 w-4" />
+                    {pet.location}
+                  </div>
+                  <p className="text-sm">{pet.description}</p>
+                </CardContent>
+                <CardFooter className="flex gap-2">
+                  <Button className="flex-1">
+                    <Heart className="h-4 w-4 mr-2" />
+                    Adopt
+                  </Button>
+                  <Button variant="outline">
+                    <Info className="h-4 w-4" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Adopt;

@@ -34,22 +34,29 @@ export const Navbar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-6 md:flex">
-          <Link to="/explore" className="text-sm font-medium transition-colors hover:text-primary">
-            Explore
+          <Link to="/adopt" className="text-sm font-medium transition-colors hover:text-primary">
+            Adopt
           </Link>
-          <Link to="/experience" className="text-sm font-medium transition-colors hover:text-primary">
-            Experience
+          <Link to="/buy-pets" className="text-sm font-medium transition-colors hover:text-primary">
+            Buy Pets
+          </Link>
+          <Link to="/shop" className="text-sm font-medium transition-colors hover:text-primary">
+            Shop
+          </Link>
+          <Link to="/vets" className="text-sm font-medium transition-colors hover:text-primary">
+            Vets
+          </Link>
+          <Link to="/grooming" className="text-sm font-medium transition-colors hover:text-primary">
+            Grooming
+          </Link>
+          <Link to="/cafes" className="text-sm font-medium transition-colors hover:text-primary">
+            Cafes
           </Link>
           {user && (
-            <>
-              <Link to="/wallet" className="text-sm font-medium transition-colors hover:text-primary">
-                <Wallet className="inline h-4 w-4 mr-1" />
-                Wallet
-              </Link>
-              <Link to="/bookings" className="text-sm font-medium transition-colors hover:text-primary">
-                My Bookings
-              </Link>
-            </>
+            <Link to="/wallet" className="text-sm font-medium transition-colors hover:text-primary">
+              <Wallet className="inline h-4 w-4 mr-1" />
+              Wallet
+            </Link>
           )}
           {user ? (
             <Link to="/profile">
@@ -73,21 +80,28 @@ export const Navbar = () => {
           </SheetTrigger>
           <SheetContent>
             <div className="flex flex-col gap-4 pt-8">
-              <Link to="/explore" className="text-lg font-medium">
-                Explore
+              <Link to="/adopt" className="text-lg font-medium">
+                Adopt
               </Link>
-              <Link to="/experience" className="text-lg font-medium">
-                Experience
+              <Link to="/buy-pets" className="text-lg font-medium">
+                Buy Pets
+              </Link>
+              <Link to="/shop" className="text-lg font-medium">
+                Shop
+              </Link>
+              <Link to="/vets" className="text-lg font-medium">
+                Vets
+              </Link>
+              <Link to="/grooming" className="text-lg font-medium">
+                Grooming
+              </Link>
+              <Link to="/cafes" className="text-lg font-medium">
+                Cafes
               </Link>
               {user && (
-                <>
-                  <Link to="/wallet" className="text-lg font-medium">
-                    Wallet
-                  </Link>
-                  <Link to="/bookings" className="text-lg font-medium">
-                    My Bookings
-                  </Link>
-                </>
+                <Link to="/wallet" className="text-lg font-medium">
+                  Wallet
+                </Link>
               )}
               {user ? (
                 <Link to="/profile">
