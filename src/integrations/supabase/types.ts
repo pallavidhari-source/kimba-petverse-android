@@ -292,6 +292,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      update_wallet_balance: {
+        Args: {
+          _amount: number
+          _description: string
+          _transaction_type: string
+          _user_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "host" | "user"
