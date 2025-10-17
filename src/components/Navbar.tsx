@@ -39,34 +39,40 @@ export const Navbar = () => {
   }, []);
 
   const checkHostStatus = async (userId: string) => {
-    const { data } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .eq("role", "host")
-      .single();
-    
-    setIsHost(!!data);
+    try {
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .eq("role", "host")
+        .single();
+      
+      setIsHost(!!data);
 
-    // Load profile data
-    const { data: profileData } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", userId)
-      .single();
-    
-    if (profileData) {
-      setProfile(profileData);
-    }
+      // Load profile data
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
+      
+      if (profileData) {
+        setProfile(profileData);
+      }
 
-    // Load all roles
-    const { data: rolesData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId);
-    
-    if (rolesData) {
-      setRoles(rolesData.map(r => r.role));
+      // Load all roles
+      const { data: rolesData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId);
+      
+      console.log("Loaded user roles:", rolesData);
+      
+      if (rolesData) {
+        setRoles(rolesData.map(r => r.role));
+      }
+    } catch (error) {
+      console.error("Error loading user data:", error);
     }
   };
 

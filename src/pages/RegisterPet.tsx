@@ -141,8 +141,13 @@ const RegisterPet = () => {
 
       if (error) throw error;
 
+      console.log("Pet registered successfully, navigating to host dashboard...");
       toast.success("Pet registered successfully!");
-      navigate("/host-dashboard");
+      
+      // Small delay to ensure toast is visible before navigation
+      setTimeout(() => {
+        navigate("/host-dashboard", { replace: true });
+      }, 500);
     } catch (error: any) {
       console.error("Error registering pet:", error);
       toast.error(error.message || "Failed to register pet");

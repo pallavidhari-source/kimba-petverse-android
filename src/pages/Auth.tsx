@@ -61,10 +61,15 @@ const Auth = () => {
 
       // If signing up as host, add host role
       if (isHostSignup && data.user) {
-        await supabase.from("user_roles").insert({
+        const { error: roleError } = await supabase.from("user_roles").insert({
           user_id: data.user.id,
           role: "host"
         });
+        
+        if (roleError) {
+          console.error("Error adding host role:", roleError);
+          toast.error("Failed to add host role. Please contact support.");
+        }
       }
 
       toast.success("Account created successfully!");
