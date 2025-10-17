@@ -142,7 +142,7 @@ const RegisterPet = () => {
       if (error) throw error;
 
       toast.success("Pet registered successfully!");
-      navigate("/profile");
+      navigate("/host-dashboard");
     } catch (error: any) {
       console.error("Error registering pet:", error);
       toast.error(error.message || "Failed to register pet");
