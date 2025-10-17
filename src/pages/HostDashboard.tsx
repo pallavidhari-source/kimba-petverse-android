@@ -4,17 +4,9 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { PawPrint, Plus, Pencil, Trash2, Loader2 } from "lucide-react";
+import { PawPrint, Plus, Pencil, Trash2, Loader2, MapPin, IndianRupee } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -167,84 +159,79 @@ const HostDashboard = () => {
                 </Button>
               </div>
             ) : (
-              <div className="rounded-md border overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Image</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Breed</TableHead>
-                      <TableHead>Age</TableHead>
-                      <TableHead>Price/Hour</TableHead>
-                      <TableHead>Location</TableHead>
-                      <TableHead>Features</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {pets.map((pet) => (
-                      <TableRow key={pet.id}>
-                        <TableCell>
-                          {pet.image_url ? (
-                            <img
-                              src={pet.image_url}
-                              alt={pet.name}
-                              className="h-12 w-12 rounded-lg object-cover"
-                            />
-                          ) : (
-                            <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center">
-                              <PawPrint className="h-6 w-6 text-muted-foreground" />
-                            </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {pets.map((pet) => (
+                  <Card key={pet.id} className="overflow-hidden">
+                    <div className="relative h-48 bg-muted">
+                      {pet.image_url ? (
+                        <img
+                          src={pet.image_url}
+                          alt={pet.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <PawPrint className="h-16 w-16 text-muted-foreground" />
+                        </div>
+                      )}
+                      <div className="absolute top-2 right-2">
+                        <Badge variant={pet.available ? "default" : "secondary"}>
+                          {pet.available ? "Available" : "Unavailable"}
+                        </Badge>
+                      </div>
+                    </div>
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
+                        <div>
+                          <h3 className="font-semibold text-lg">{pet.name}</h3>
+                          <p className="text-sm text-muted-foreground">
+                            {pet.breed} • {pet.age} years old
+                          </p>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 text-sm">
+                          <IndianRupee className="h-4 w-4 text-primary" />
+                          <span className="font-medium">₹{pet.price_per_hour}/hour</span>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <MapPin className="h-4 w-4" />
+                          <span className="truncate">{pet.location}</span>
+                        </div>
+
+                        <div className="flex flex-wrap gap-1">
+                          {pet.is_vaccinated && (
+                            <Badge variant="secondary" className="text-xs">Vaccinated</Badge>
                           )}
-                        </TableCell>
-                        <TableCell className="font-medium">{pet.name}</TableCell>
-                        <TableCell className="capitalize">{pet.type}</TableCell>
-                        <TableCell>{pet.breed}</TableCell>
-                        <TableCell>{pet.age}y</TableCell>
-                        <TableCell>₹{pet.price_per_hour}</TableCell>
-                        <TableCell className="max-w-[150px] truncate">{pet.location}</TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1">
-                            {pet.is_vaccinated && (
-                              <Badge variant="secondary" className="text-xs">Vaccinated</Badge>
-                            )}
-                            {pet.is_trained && (
-                              <Badge variant="secondary" className="text-xs">Trained</Badge>
-                            )}
-                            {pet.is_kid_friendly && (
-                              <Badge variant="secondary" className="text-xs">Kid-Friendly</Badge>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={pet.available ? "default" : "secondary"}>
-                            {pet.available ? "Available" : "Unavailable"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center justify-end gap-2">
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              onClick={() => navigate(`/edit-pet/${pet.id}`)}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              onClick={() => setDeleteId(pet.id)}
-                            >
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                          {pet.is_trained && (
+                            <Badge variant="secondary" className="text-xs">Trained</Badge>
+                          )}
+                          {pet.is_kid_friendly && (
+                            <Badge variant="secondary" className="text-xs">Kid-Friendly</Badge>
+                          )}
+                        </div>
+
+                        <div className="flex gap-2 pt-2">
+                          <Button
+                            variant="outline"
+                            className="flex-1"
+                            onClick={() => navigate(`/edit-pet/${pet.id}`)}
+                          >
+                            <Pencil className="h-4 w-4 mr-2" />
+                            Edit
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => setDeleteId(pet.id)}
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             )}
           </CardContent>
