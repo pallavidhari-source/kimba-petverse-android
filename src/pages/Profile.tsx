@@ -14,6 +14,8 @@ const Profile = () => {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
   const [roles, setRoles] = useState<string[]>([]);
+  const [hasPets, setHasPets] = useState(false);
+  const [checkingPets, setCheckingPets] = useState(false);
 
   useEffect(() => {
     loadUserData();
@@ -49,6 +51,19 @@ const Profile = () => {
 
       if (rolesData) {
         setRoles(rolesData.map(r => r.role));
+        
+        // If user is a host, check if they have registered pets
+        if (rolesData.some(r => r.role === 'host')) {
+          setCheckingPets(true);
+          const { data: petsData } = await supabase
+            .from("pets")
+            .select("id")
+            .eq("host_id", session.user.id)
+            .limit(1);
+          
+          setHasPets(petsData && petsData.length > 0);
+          setCheckingPets(false);
+        }
       }
     } catch (error: any) {
       toast.error("Failed to load profile");
@@ -153,15 +168,32 @@ const Profile = () => {
 
             {/* Host Dashboard Link */}
             {roles.includes("host") && (
-              <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
-                <p className="mb-2 text-sm font-medium">You're a verified host!</p>
-                <Button
-                  variant="outline"
-                  onClick={() => navigate("/become-host")}
-                  className="w-full"
-                >
-                  View Host Application
-                </Button>
+              <div className="space-y-3">
+                {!hasPets && !checkingPets && (
+                  <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+                    <p className="mb-2 text-sm font-medium">Register your pet to start hosting!</p>
+                    <p className="mb-3 text-xs text-muted-foreground">
+                      You haven't registered any pets yet. Add your pet to start offering pet experiences.
+                    </p>
+                    <Button
+                      onClick={() => navigate("/register-pet")}
+                      className="w-full"
+                    >
+                      Register Your Pet
+                    </Button>
+                  </div>
+                )}
+                
+                <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+                  <p className="mb-2 text-sm font-medium">You're a verified host!</p>
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate("/become-host")}
+                    className="w-full"
+                  >
+                    View Host Application
+                  </Button>
+                </div>
               </div>
             )}
 
