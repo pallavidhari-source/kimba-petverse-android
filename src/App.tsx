@@ -14,6 +14,7 @@ import Grooming from "./pages/Grooming";
 import Cafes from "./pages/Cafes";
 import BecomeHost from "./pages/BecomeHost";
 import Admin from "./pages/Admin";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/become-host" element={<BecomeHost />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/profile" element={<Profile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
