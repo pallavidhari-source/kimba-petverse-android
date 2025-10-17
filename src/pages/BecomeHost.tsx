@@ -61,11 +61,8 @@ const BecomeHost = () => {
     
     if (error) throw error;
     
-    const { data: { publicUrl } } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(data.path);
-    
-    return publicUrl;
+    // Return file path instead of public URL for security
+    return data.path;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

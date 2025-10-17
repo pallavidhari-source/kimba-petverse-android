@@ -121,6 +121,23 @@ const Admin = () => {
     }
   };
 
+  const viewDocument = async (filePath: string) => {
+    try {
+      // Generate signed URL with 1 hour expiration
+      const { data, error } = await supabase.storage
+        .from('kyc-documents')
+        .createSignedUrl(filePath, 3600);
+      
+      if (error) throw error;
+      
+      if (data?.signedUrl) {
+        window.open(data.signedUrl, '_blank');
+      }
+    } catch (error: any) {
+      toast.error("Failed to load document");
+    }
+  };
+
   const updateApplicationStatus = async (appId: string, status: "approved" | "rejected") => {
     try {
       const { error } = await supabase
@@ -243,14 +260,14 @@ const Admin = () => {
                   <div className="space-y-2">
                     <Label>Documents:</Label>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => window.open(app.kyc_document_url, '_blank')}>
+                      <Button variant="outline" size="sm" onClick={() => viewDocument(app.kyc_document_url)}>
                         View KYC
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => window.open(app.vaccination_certificate_url, '_blank')}>
+                      <Button variant="outline" size="sm" onClick={() => viewDocument(app.vaccination_certificate_url)}>
                         View Vaccination
                       </Button>
                       {app.pet_images_urls.map((url, idx) => (
-                        <Button key={idx} variant="outline" size="sm" onClick={() => window.open(url, '_blank')}>
+                        <Button key={idx} variant="outline" size="sm" onClick={() => viewDocument(url)}>
                           Pet Image {idx + 1}
                         </Button>
                       ))}
