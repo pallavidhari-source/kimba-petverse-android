@@ -8,20 +8,40 @@ import kimbaLogo from "@/assets/kimba-logo.png";
 
 export const Navbar = () => {
   const [user, setUser] = useState<any>(null);
+  const [isHost, setIsHost] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        checkHostStatus(session.user.id);
+      }
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        checkHostStatus(session.user.id);
+      } else {
+        setIsHost(false);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const checkHostStatus = async (userId: string) => {
+    const { data } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId)
+      .eq("role", "host")
+      .single();
+    
+    setIsHost(!!data);
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-card/80 backdrop-blur-lg">
@@ -61,11 +81,18 @@ export const Navbar = () => {
             </Link>
           )}
           {user ? (
-            <Link to="/profile">
-              <Button variant="outline" size="icon" className="rounded-full">
-                <User className="h-4 w-4" />
-              </Button>
-            </Link>
+            <>
+              {isHost && (
+                <Link to="/host-dashboard" className="text-sm font-medium transition-colors hover:text-primary">
+                  Host Dashboard
+                </Link>
+              )}
+              <Link to="/profile">
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <User className="h-4 w-4" />
+                </Button>
+              </Link>
+            </>
           ) : (
             <Link to="/auth">
               <Button>Sign In</Button>
@@ -109,11 +136,18 @@ export const Navbar = () => {
                 </Link>
               )}
               {user ? (
-                <Link to="/profile">
-                  <Button variant="outline" className="w-full">
-                    Profile
-                  </Button>
-                </Link>
+                <>
+                  {isHost && (
+                    <Link to="/host-dashboard" className="text-lg font-medium">
+                      Host Dashboard
+                    </Link>
+                  )}
+                  <Link to="/profile">
+                    <Button variant="outline" className="w-full">
+                      Profile
+                    </Button>
+                  </Link>
+                </>
               ) : (
                 <Link to="/auth">
                   <Button className="w-full">Sign In</Button>

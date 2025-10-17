@@ -106,39 +106,57 @@ export type Database = {
       host_applications: {
         Row: {
           admin_notes: string | null
+          available_time_slots: string[] | null
           created_at: string | null
           full_name: string
           id: string
           kyc_document_url: string | null
+          pet_gender: string | null
+          pet_images_urls: string[] | null
+          pet_name: string | null
+          pet_type: string | null
           phone: string
           selfie_url: string | null
           status: Database["public"]["Enums"]["host_status"] | null
           updated_at: string | null
           user_id: string
+          vaccination_certificate_url: string | null
         }
         Insert: {
           admin_notes?: string | null
+          available_time_slots?: string[] | null
           created_at?: string | null
           full_name: string
           id?: string
           kyc_document_url?: string | null
+          pet_gender?: string | null
+          pet_images_urls?: string[] | null
+          pet_name?: string | null
+          pet_type?: string | null
           phone: string
           selfie_url?: string | null
           status?: Database["public"]["Enums"]["host_status"] | null
           updated_at?: string | null
           user_id: string
+          vaccination_certificate_url?: string | null
         }
         Update: {
           admin_notes?: string | null
+          available_time_slots?: string[] | null
           created_at?: string | null
           full_name?: string
           id?: string
           kyc_document_url?: string | null
+          pet_gender?: string | null
+          pet_images_urls?: string[] | null
+          pet_name?: string | null
+          pet_type?: string | null
           phone?: string
           selfie_url?: string | null
           status?: Database["public"]["Enums"]["host_status"] | null
           updated_at?: string | null
           user_id?: string
+          vaccination_certificate_url?: string | null
         }
         Relationships: []
       }

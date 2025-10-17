@@ -12,6 +12,8 @@ import Shop from "./pages/Shop";
 import Vets from "./pages/Vets";
 import Grooming from "./pages/Grooming";
 import Cafes from "./pages/Cafes";
+import BecomeHost from "./pages/BecomeHost";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +34,8 @@ const App = () => (
           <Route path="/grooming" element={<Grooming />} />
           <Route path="/cafes" element={<Cafes />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/become-host" element={<BecomeHost />} />
+          <Route path="/admin" element={<Admin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
