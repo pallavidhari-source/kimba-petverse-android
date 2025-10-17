@@ -12,6 +12,7 @@ import { toast } from "sonner";
 const Auth = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [isHostSignup, setIsHostSignup] = useState(false);
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,10 +25,11 @@ const Auth = () => {
     const phone = formData.get("phone") as string;
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
+          emailRedirectTo: `${window.location.origin}/`,
           data: {
             full_name: fullName,
             phone,
@@ -37,8 +39,22 @@ const Auth = () => {
 
       if (error) throw error;
 
+      // If signing up as host, add host role
+      if (isHostSignup && data.user) {
+        await supabase.from("user_roles").insert({
+          user_id: data.user.id,
+          role: "host"
+        });
+      }
+
       toast.success("Account created successfully!");
-      navigate("/explore");
+      
+      // Redirect hosts to registration page, others to explore
+      if (isHostSignup) {
+        navigate("/become-host");
+      } else {
+        navigate("/explore");
+      }
     } catch (error: any) {
       toast.error(error.message || "Failed to sign up");
     } finally {
@@ -55,12 +71,37 @@ const Auth = () => {
     const password = formData.get("password") as string;
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) throw error;
+
+      // Check if user is a host
+      if (data.user) {
+        const { data: roles } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", data.user.id)
+          .eq("role", "host");
+
+        // If host, check if they have completed application
+        if (roles && roles.length > 0) {
+          const { data: application } = await supabase
+            .from("host_applications")
+            .select("id, status")
+            .eq("user_id", data.user.id)
+            .maybeSingle();
+
+          // Redirect to registration if no application exists
+          if (!application) {
+            toast.success("Welcome! Please complete your host registration.");
+            navigate("/become-host");
+            return;
+          }
+        }
+      }
 
       toast.success("Welcome back!");
       navigate("/explore");
@@ -152,6 +193,18 @@ const Auth = () => {
                       type="password"
                       required
                     />
+                  </div>
+                  <div className="flex items-center space-x-2 rounded-lg border p-4">
+                    <input
+                      type="checkbox"
+                      id="host-signup"
+                      checked={isHostSignup}
+                      onChange={(e) => setIsHostSignup(e.target.checked)}
+                      className="h-4 w-4 rounded border-gray-300"
+                    />
+                    <label htmlFor="host-signup" className="text-sm font-medium leading-none">
+                      I want to become a pet host
+                    </label>
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? "Creating account..." : "Create Account"}
