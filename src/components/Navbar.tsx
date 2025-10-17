@@ -1,14 +1,20 @@
-import { Menu, User, Wallet } from "lucide-react";
+import { Menu, User, Wallet, LogOut, Mail, Phone, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 import kimbaLogo from "@/assets/kimba-logo.png";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [isHost, setIsHost] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
+  const [roles, setRoles] = useState<string[]>([]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -41,6 +47,39 @@ export const Navbar = () => {
       .single();
     
     setIsHost(!!data);
+
+    // Load profile data
+    const { data: profileData } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", userId)
+      .single();
+    
+    if (profileData) {
+      setProfile(profileData);
+    }
+
+    // Load all roles
+    const { data: rolesData } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId);
+    
+    if (rolesData) {
+      setRoles(rolesData.map(r => r.role));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      toast.success("Signed out successfully");
+      navigate("/");
+    } catch (error: any) {
+      toast.error("Failed to sign out");
+    }
   };
 
   return (
@@ -87,11 +126,69 @@ export const Navbar = () => {
                   Host Dashboard
                 </Link>
               )}
-              <Link to="/profile">
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <User className="h-4 w-4" />
-                </Button>
-              </Link>
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <User className="h-4 w-4" />
+                  </Button>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80" align="end">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                        <User className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">{profile?.full_name || "User"}</p>
+                        <p className="text-xs text-muted-foreground">{user?.email}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      {profile?.phone && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <Phone className="h-3 w-3 text-muted-foreground" />
+                          <span>{profile.phone}</span>
+                        </div>
+                      )}
+                      
+                      {roles.length > 0 && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <Shield className="h-3 w-3 text-muted-foreground" />
+                          <div className="flex flex-wrap gap-1">
+                            {roles.map((role) => (
+                              <Badge key={role} variant="secondary" className="text-xs capitalize">
+                                {role}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {isHost && (
+                      <Button
+                        variant="outline"
+                        onClick={() => navigate("/register-pet")}
+                        className="w-full"
+                        size="sm"
+                      >
+                        Register Pet
+                      </Button>
+                    )}
+
+                    <Button
+                      onClick={handleSignOut}
+                      variant="destructive"
+                      className="w-full"
+                      size="sm"
+                    >
+                      <LogOut className="mr-2 h-3 w-3" />
+                      Sign Out
+                    </Button>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
             </>
           ) : (
             <Link to="/auth">
