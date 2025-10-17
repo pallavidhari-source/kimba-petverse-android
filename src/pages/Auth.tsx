@@ -14,6 +14,19 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [isHostSignup, setIsHostSignup] = useState(false);
 
+  // Allowed emails for development
+  const allowedEmails = [
+    'pallavidhari@gmail.com',
+    'shivahosur@gmail.com',
+    'anvikahosur@gmail.com',
+    'pallavihosur09@gmail.com',
+    'hosurpallavi@gmail.com'
+  ];
+
+  const isEmailAllowed = (email: string) => {
+    return allowedEmails.includes(email.toLowerCase().trim());
+  };
+
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -23,6 +36,13 @@ const Auth = () => {
     const password = formData.get("password") as string;
     const fullName = formData.get("fullName") as string;
     const phone = formData.get("phone") as string;
+
+    // Check if email is allowed
+    if (!isEmailAllowed(email)) {
+      toast.error("This email is not authorized to access this application during development.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -69,6 +89,13 @@ const Auth = () => {
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+
+    // Check if email is allowed
+    if (!isEmailAllowed(email)) {
+      toast.error("This email is not authorized to access this application during development.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
