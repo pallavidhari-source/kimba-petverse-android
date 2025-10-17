@@ -127,6 +127,11 @@ const Auth = () => {
             navigate("/become-host");
             return;
           }
+
+          // Redirect host to host dashboard
+          toast.success("Welcome back, Host!");
+          navigate("/host-dashboard");
+          return;
         }
       }
 
