@@ -1,9 +1,10 @@
-import { Heart, Menu, User, Wallet } from "lucide-react";
+import { Menu, User, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import kimbaLogo from "@/assets/kimba-logo.png";
 
 export const Navbar = () => {
   const [user, setUser] = useState<any>(null);
@@ -25,15 +26,16 @@ export const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-card/80 backdrop-blur-lg">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-hero">
-            <Heart className="h-5 w-5 fill-primary-foreground text-primary-foreground" />
-          </div>
-          <span className="text-xl font-bold">Kimba Petverse</span>
+        <Link to="/" className="flex items-center gap-3">
+          <img src={kimbaLogo} alt="Kimba Petverse" className="h-12 w-12 rounded-xl object-cover shadow-md" />
+          <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Kimba Petverse</span>
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-6 md:flex">
+          <Link to="/explore" className="text-sm font-medium transition-colors hover:text-primary">
+            Explore
+          </Link>
           <Link to="/adopt" className="text-sm font-medium transition-colors hover:text-primary">
             Adopt
           </Link>
@@ -80,6 +82,9 @@ export const Navbar = () => {
           </SheetTrigger>
           <SheetContent>
             <div className="flex flex-col gap-4 pt-8">
+              <Link to="/explore" className="text-lg font-medium">
+                Explore
+              </Link>
               <Link to="/adopt" className="text-lg font-medium">
                 Adopt
               </Link>

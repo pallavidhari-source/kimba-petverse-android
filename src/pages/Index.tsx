@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 import { Link } from "react-router-dom";
-import { Heart, Shield, Star, Clock } from "lucide-react";
+import { Heart, Shield, Star, Clock, Sparkles, Home, ShoppingBag, Stethoscope, Scissors, Coffee, Wallet } from "lucide-react";
 import heroImage from "@/assets/hero-pets.jpg";
 
 const Index = () => {
@@ -14,6 +14,58 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="grid gap-8 md:grid-cols-2 items-center">
             <div className="space-y-6">
+              {/* Navigation Circles */}
+              <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-8">
+                <Link to="/explore" className="group flex flex-col items-center gap-2">
+                  <div className="w-16 h-16 rounded-full bg-background/20 backdrop-blur-sm border-2 border-primary-foreground/30 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-background/30 group-hover:border-primary-foreground/50">
+                    <Sparkles className="h-7 w-7 text-primary-foreground" />
+                  </div>
+                  <span className="text-xs text-primary-foreground/90 font-medium">Explore</span>
+                </Link>
+                <Link to="/adopt" className="group flex flex-col items-center gap-2">
+                  <div className="w-16 h-16 rounded-full bg-background/20 backdrop-blur-sm border-2 border-primary-foreground/30 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-background/30 group-hover:border-primary-foreground/50">
+                    <Heart className="h-7 w-7 text-primary-foreground" />
+                  </div>
+                  <span className="text-xs text-primary-foreground/90 font-medium">Adopt</span>
+                </Link>
+                <Link to="/buy-pets" className="group flex flex-col items-center gap-2">
+                  <div className="w-16 h-16 rounded-full bg-background/20 backdrop-blur-sm border-2 border-primary-foreground/30 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-background/30 group-hover:border-primary-foreground/50">
+                    <Home className="h-7 w-7 text-primary-foreground" />
+                  </div>
+                  <span className="text-xs text-primary-foreground/90 font-medium">Buy Pets</span>
+                </Link>
+                <Link to="/shop" className="group flex flex-col items-center gap-2">
+                  <div className="w-16 h-16 rounded-full bg-background/20 backdrop-blur-sm border-2 border-primary-foreground/30 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-background/30 group-hover:border-primary-foreground/50">
+                    <ShoppingBag className="h-7 w-7 text-primary-foreground" />
+                  </div>
+                  <span className="text-xs text-primary-foreground/90 font-medium">Shop</span>
+                </Link>
+                <Link to="/vets" className="group flex flex-col items-center gap-2">
+                  <div className="w-16 h-16 rounded-full bg-background/20 backdrop-blur-sm border-2 border-primary-foreground/30 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-background/30 group-hover:border-primary-foreground/50">
+                    <Stethoscope className="h-7 w-7 text-primary-foreground" />
+                  </div>
+                  <span className="text-xs text-primary-foreground/90 font-medium">Vets</span>
+                </Link>
+                <Link to="/grooming" className="group flex flex-col items-center gap-2">
+                  <div className="w-16 h-16 rounded-full bg-background/20 backdrop-blur-sm border-2 border-primary-foreground/30 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-background/30 group-hover:border-primary-foreground/50">
+                    <Scissors className="h-7 w-7 text-primary-foreground" />
+                  </div>
+                  <span className="text-xs text-primary-foreground/90 font-medium">Grooming</span>
+                </Link>
+                <Link to="/cafes" className="group flex flex-col items-center gap-2">
+                  <div className="w-16 h-16 rounded-full bg-background/20 backdrop-blur-sm border-2 border-primary-foreground/30 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-background/30 group-hover:border-primary-foreground/50">
+                    <Coffee className="h-7 w-7 text-primary-foreground" />
+                  </div>
+                  <span className="text-xs text-primary-foreground/90 font-medium">Cafes</span>
+                </Link>
+                <Link to="/wallet" className="group flex flex-col items-center gap-2">
+                  <div className="w-16 h-16 rounded-full bg-background/20 backdrop-blur-sm border-2 border-primary-foreground/30 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-background/30 group-hover:border-primary-foreground/50">
+                    <Wallet className="h-7 w-7 text-primary-foreground" />
+                  </div>
+                  <span className="text-xs text-primary-foreground/90 font-medium">Wallet</span>
+                </Link>
+              </div>
+
               <h1 className="text-4xl font-bold leading-tight text-primary-foreground md:text-5xl lg:text-6xl">
                 Experience Pet Love Without the Commitment
               </h1>
@@ -22,12 +74,16 @@ const Index = () => {
               </p>
               <div className="flex flex-col gap-4 sm:flex-row">
                 <Link to="/explore">
-                  <Button size="lg" variant="secondary" className="w-full sm:w-auto">
+                  <Button size="lg" variant="secondary" className="w-full sm:w-auto shadow-lg">
                     Explore Pets
                   </Button>
                 </Link>
                 <Link to="/become-host">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="w-full sm:w-auto bg-background/20 backdrop-blur-sm border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-all shadow-lg"
+                  >
                     Become a Host
                   </Button>
                 </Link>
