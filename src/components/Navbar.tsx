@@ -122,9 +122,6 @@ export const Navbar = () => {
           <Link to="/pet-airbnb" className="text-sm font-medium transition-colors hover:text-primary">
             Kimba Pet Stays
           </Link>
-          <Link to="/pet-cemeteries" className="text-sm font-medium transition-colors hover:text-primary">
-            Pet Cemeteries
-          </Link>
           {user && (
             <Link to="/wallet" className="text-sm font-medium transition-colors hover:text-primary">
               <Wallet className="inline h-4 w-4 mr-1" />
@@ -241,9 +238,6 @@ export const Navbar = () => {
               </Link>
               <Link to="/pet-airbnb" className="text-lg font-medium">
                 Kimba Pet Stays
-              </Link>
-              <Link to="/pet-cemeteries" className="text-lg font-medium">
-                Pet Cemeteries
               </Link>
               {user && (
                 <Link to="/wallet" className="text-lg font-medium">
