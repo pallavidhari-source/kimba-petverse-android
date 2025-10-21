@@ -35,7 +35,7 @@ const App = () => (
         <img 
           src={kimbaLogo} 
           alt="Kimba Watermark" 
-          className="w-96 h-96 object-contain opacity-[0.03]"
+          className="w-96 h-96 object-contain opacity-[0.08]"
         />
       </div>
       <BrowserRouter>
