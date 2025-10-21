@@ -40,14 +40,6 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
-        brown: {
-          DEFAULT: "hsl(var(--brown))",
-          foreground: "hsl(var(--brown-foreground))",
-        },
-        yellow: {
-          DEFAULT: "hsl(var(--yellow))",
-          foreground: "hsl(var(--yellow-foreground))",
-        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
