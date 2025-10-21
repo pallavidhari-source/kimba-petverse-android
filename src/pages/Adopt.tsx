@@ -1,15 +1,21 @@
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Heart, MapPin, Info } from "lucide-react";
+import { useState } from "react";
 
 const Adopt = () => {
+  const [selectedPet, setSelectedPet] = useState<any>(null);
+  
   const adoptionPets = [
     {
       id: 1,
       name: "Max",
       breed: "Golden Retriever",
       age: "2 years",
+      gender: "male",
+      isNeutered: true,
       location: "Banjara Hills",
       image: "/placeholder.svg",
       description: "Friendly and well-trained"
@@ -19,6 +25,8 @@ const Adopt = () => {
       name: "Luna",
       breed: "Persian Cat",
       age: "1 year",
+      gender: "female",
+      isSpayed: true,
       location: "Jubilee Hills",
       image: "/placeholder.svg",
       description: "Calm and affectionate"
@@ -28,6 +36,8 @@ const Adopt = () => {
       name: "Rocky",
       breed: "Labrador",
       age: "3 years",
+      gender: "male",
+      isNeutered: false,
       location: "Hitech City",
       image: "/placeholder.svg",
       description: "Energetic and playful"
@@ -77,9 +87,60 @@ const Adopt = () => {
                     <Heart className="h-4 w-4 mr-2" />
                     Adopt
                   </Button>
-                  <Button variant="outline">
-                    <Info className="h-4 w-4" />
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" onClick={() => setSelectedPet(pet)}>
+                        <Info className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Pet Details</DialogTitle>
+                        <DialogDescription>
+                          Complete information about {pet.name}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm font-medium text-muted-foreground">Name</p>
+                            <p className="text-base font-semibold">{pet.name}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-muted-foreground">Gender</p>
+                            <p className="text-base font-semibold capitalize">{pet.gender}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-muted-foreground">Age</p>
+                            <p className="text-base font-semibold">{pet.age}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-muted-foreground">Breed</p>
+                            <p className="text-base font-semibold">{pet.breed}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-muted-foreground">
+                              {pet.gender === "male" ? "Neutered" : "Spayed"}
+                            </p>
+                            <p className="text-base font-semibold">
+                              {pet.gender === "male" 
+                                ? (pet.isNeutered ? "Yes" : "No")
+                                : (pet.isSpayed ? "Yes" : "No")
+                              }
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-muted-foreground">Location</p>
+                            <p className="text-base font-semibold">{pet.location}</p>
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-muted-foreground mb-1">Description</p>
+                          <p className="text-sm">{pet.description}</p>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </CardFooter>
               </Card>
             ))}
