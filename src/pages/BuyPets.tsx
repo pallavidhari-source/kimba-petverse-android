@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, MapPin } from "lucide-react";
+import buyGermanShepherd from "@/assets/buy-german-shepherd.jpg";
+import buySiamese from "@/assets/buy-siamese.jpg";
+import buyBeagle from "@/assets/buy-beagle.jpg";
 
 const BuyPets = () => {
   const petsForSale = [
@@ -13,7 +16,7 @@ const BuyPets = () => {
       age: "3 months",
       price: "₹25,000",
       location: "Madhapur",
-      image: "/placeholder.svg",
+      image: buyGermanShepherd,
       certified: true
     },
     {
@@ -23,7 +26,7 @@ const BuyPets = () => {
       age: "2 months",
       price: "₹18,000",
       location: "Gachibowli",
-      image: "/placeholder.svg",
+      image: buySiamese,
       certified: true
     },
     {
@@ -33,7 +36,7 @@ const BuyPets = () => {
       age: "4 months",
       price: "₹22,000",
       location: "Kondapur",
-      image: "/placeholder.svg",
+      image: buyBeagle,
       certified: true
     }
   ];

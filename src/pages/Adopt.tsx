@@ -4,6 +4,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Heart, MapPin, Info } from "lucide-react";
 import { useState } from "react";
+import adoptMax from "@/assets/adopt-max.jpg";
+import adoptLuna from "@/assets/adopt-luna.jpg";
+import adoptRocky from "@/assets/adopt-rocky.jpg";
 
 const Adopt = () => {
   const [selectedPet, setSelectedPet] = useState<any>(null);
@@ -17,7 +20,7 @@ const Adopt = () => {
       gender: "male",
       isNeutered: true,
       location: "Banjara Hills",
-      image: "/placeholder.svg",
+      image: adoptMax,
       description: "Friendly and well-trained"
     },
     {
@@ -28,7 +31,7 @@ const Adopt = () => {
       gender: "female",
       isSpayed: true,
       location: "Jubilee Hills",
-      image: "/placeholder.svg",
+      image: adoptLuna,
       description: "Calm and affectionate"
     },
     {
@@ -39,7 +42,7 @@ const Adopt = () => {
       gender: "male",
       isNeutered: false,
       location: "Hitech City",
-      image: "/placeholder.svg",
+      image: adoptRocky,
       description: "Energetic and playful"
     }
   ];
