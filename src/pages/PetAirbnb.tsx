@@ -81,7 +81,7 @@ const PetAirbnb = () => {
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-8">
               <TabsTrigger value="all">All Stays</TabsTrigger>
               <TabsTrigger value="commercial">Commercial</TabsTrigger>
-              <TabsTrigger value="individual">Individual</TabsTrigger>
+              <TabsTrigger value="individual">Homes</TabsTrigger>
             </TabsList>
 
             <TabsContent value="all">
@@ -125,7 +125,7 @@ const PetAirbnb = () => {
             <TabsContent value="individual">
               {loading ? (
                 <div className="text-center py-12">
-                  <p className="text-muted-foreground">Loading individual stays...</p>
+                  <p className="text-muted-foreground">Loading homes...</p>
                 </div>
               ) : individualStays.length > 0 ? (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -135,8 +135,8 @@ const PetAirbnb = () => {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <h2 className="text-2xl font-semibold mb-2">No Individual Stays Available</h2>
-                  <p className="text-muted-foreground">Check back soon for individual pet accommodations.</p>
+                  <h2 className="text-2xl font-semibold mb-2">No Homes Available</h2>
+                  <p className="text-muted-foreground">Check back soon for home pet accommodations.</p>
                 </div>
               )}
             </TabsContent>
