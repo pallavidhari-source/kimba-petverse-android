@@ -19,6 +19,7 @@ import RegisterPet from "./pages/RegisterPet";
 import HostDashboard from "./pages/HostDashboard";
 import PetAirbnb from "./pages/PetAirbnb";
 import NotFound from "./pages/NotFound";
+import CreatePetStay from "./pages/CreatePetStay";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/register-pet" element={<RegisterPet />} />
           <Route path="/host-dashboard" element={<HostDashboard />} />
+          <Route path="/create-pet-stay" element={<CreatePetStay />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

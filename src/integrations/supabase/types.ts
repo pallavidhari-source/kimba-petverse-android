@@ -178,6 +178,72 @@ export type Database = {
         }
         Relationships: []
       }
+      pet_stays: {
+        Row: {
+          amenities: string[] | null
+          available: boolean | null
+          check_in_time: string | null
+          check_out_time: string | null
+          created_at: string
+          description: string | null
+          features: string[] | null
+          host_id: string
+          id: string
+          image_url: string | null
+          location: string
+          max_capacity: string | null
+          name: string
+          pet_types: string | null
+          price_per_night: number
+          rating: number | null
+          reviews_count: number | null
+          type: Database["public"]["Enums"]["pet_stay_type"]
+          updated_at: string
+        }
+        Insert: {
+          amenities?: string[] | null
+          available?: boolean | null
+          check_in_time?: string | null
+          check_out_time?: string | null
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          host_id: string
+          id?: string
+          image_url?: string | null
+          location: string
+          max_capacity?: string | null
+          name: string
+          pet_types?: string | null
+          price_per_night: number
+          rating?: number | null
+          reviews_count?: number | null
+          type: Database["public"]["Enums"]["pet_stay_type"]
+          updated_at?: string
+        }
+        Update: {
+          amenities?: string[] | null
+          available?: boolean | null
+          check_in_time?: string | null
+          check_out_time?: string | null
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          host_id?: string
+          id?: string
+          image_url?: string | null
+          location?: string
+          max_capacity?: string | null
+          name?: string
+          pet_types?: string | null
+          price_per_night?: number
+          rating?: number | null
+          reviews_count?: number | null
+          type?: Database["public"]["Enums"]["pet_stay_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pets: {
         Row: {
           age: number
@@ -347,6 +413,7 @@ export type Database = {
       booking_status: "pending" | "confirmed" | "completed" | "cancelled"
       host_status: "pending" | "approved" | "rejected"
       payment_method: "upi" | "card" | "cod"
+      pet_stay_type: "commercial" | "individual"
       pet_type: "dog" | "cat" | "bird" | "rabbit"
     }
     CompositeTypes: {
@@ -479,6 +546,7 @@ export const Constants = {
       booking_status: ["pending", "confirmed", "completed", "cancelled"],
       host_status: ["pending", "approved", "rejected"],
       payment_method: ["upi", "card", "cod"],
+      pet_stay_type: ["commercial", "individual"],
       pet_type: ["dog", "cat", "bird", "rabbit"],
     },
   },
