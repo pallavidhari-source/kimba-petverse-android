@@ -17,6 +17,7 @@ import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
 import RegisterPet from "./pages/RegisterPet";
 import HostDashboard from "./pages/HostDashboard";
+import PetAirbnb from "./pages/PetAirbnb";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/vets" element={<Vets />} />
           <Route path="/grooming" element={<Grooming />} />
           <Route path="/cafes" element={<Cafes />} />
+          <Route path="/pet-airbnb" element={<PetAirbnb />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/become-host" element={<BecomeHost />} />
           <Route path="/admin" element={<Admin />} />
