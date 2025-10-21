@@ -99,7 +99,7 @@ export const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-6 md:flex">
           <Link to="/explore" className="text-sm font-medium transition-colors hover:text-primary">
-            Explore
+            Pet Airbnb
           </Link>
           <Link to="/adopt" className="text-sm font-medium transition-colors hover:text-primary">
             Adopt
@@ -213,7 +213,7 @@ export const Navbar = () => {
           <SheetContent>
             <div className="flex flex-col gap-4 pt-8">
               <Link to="/explore" className="text-lg font-medium">
-                Explore
+                Pet Airbnb
               </Link>
               <Link to="/adopt" className="text-lg font-medium">
                 Adopt
