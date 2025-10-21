@@ -12,116 +12,7 @@ import airbnbResort from "@/assets/airbnb-resort.jpg";
 const PetAirbnb = () => {
   const [selectedStay, setSelectedStay] = useState<any>(null);
   
-  const petStays = [
-    {
-      id: 1,
-      name: "Luxe Pet Villa",
-      type: "Entire Villa",
-      location: "Banjara Hills",
-      rating: 4.9,
-      reviews: 127,
-      price: "₹3,500",
-      duration: "per night",
-      image: airbnbVilla,
-      features: ["Private Garden", "24/7 Care", "Gourmet Meals", "Webcam Access"],
-      description: "Spacious luxury villa with 2000 sq ft dedicated pet space. Perfect for large dogs or multiple pets. Features include climate-controlled rooms, premium orthopedic beds, and a private garden with play equipment.",
-      amenities: ["Climate Control", "WiFi Cameras", "Premium Food", "Daily Walks", "Grooming", "Vet on Call"],
-      maxCapacity: "4 pets",
-      petTypes: "Dogs, Cats",
-      checkIn: "10:00 AM",
-      checkOut: "12:00 PM"
-    },
-    {
-      id: 2,
-      name: "VIP Pet Suite",
-      type: "Private Suite",
-      location: "Jubilee Hills",
-      rating: 4.8,
-      reviews: 89,
-      price: "₹2,200",
-      duration: "per night",
-      image: airbnbSuite,
-      features: ["Climate Control", "Premium Bedding", "Vet on Call", "Daily Updates"],
-      description: "Modern pet suite with luxury amenities and personalized care. Each suite is soundproofed and features entertainment options including pet TV and calming music.",
-      amenities: ["AC Rooms", "Orthopedic Beds", "Webcam", "Playtime Sessions", "Treats", "Emergency Care"],
-      maxCapacity: "2 pets",
-      petTypes: "Dogs, Cats, Small Pets",
-      checkIn: "9:00 AM",
-      checkOut: "11:00 AM"
-    },
-    {
-      id: 3,
-      name: "Pet Paradise Resort",
-      type: "Resort Stay",
-      location: "Hitech City",
-      rating: 5.0,
-      reviews: 215,
-      price: "₹4,800",
-      duration: "per night",
-      image: airbnbResort,
-      features: ["Pool Access", "Spa & Grooming", "Training Sessions", "Play Park"],
-      description: "Ultimate pet resort experience with swimming pool, spa services, and professional training programs. Our 5-acre facility includes indoor and outdoor play areas, agility courses, and a dedicated cat zone.",
-      amenities: ["Swimming Pool", "Spa Services", "Professional Grooming", "Training Classes", "Play Park", "Luxury Suites"],
-      maxCapacity: "6 pets",
-      petTypes: "All Pets Welcome",
-      checkIn: "8:00 AM",
-      checkOut: "6:00 PM"
-    },
-    {
-      id: 4,
-      name: "Comfort Pet Lodge",
-      type: "Shared Space",
-      location: "Gachibowli",
-      rating: 4.7,
-      reviews: 56,
-      price: "₹1,500",
-      duration: "per night",
-      image: airbnbVilla,
-      features: ["Socialization", "Group Play", "Standard Care", "Indoor/Outdoor"],
-      description: "Affordable and friendly pet lodge perfect for social pets. Features include supervised group play sessions, indoor climate-controlled space, and outdoor play area.",
-      amenities: ["Group Activities", "Basic Care", "Daily Walks", "Standard Meals", "Play Area", "Comfortable Beds"],
-      maxCapacity: "8 pets",
-      petTypes: "Dogs, Cats",
-      checkIn: "9:00 AM",
-      checkOut: "10:00 AM"
-    },
-    {
-      id: 5,
-      name: "Royal Pet Mansion",
-      type: "Luxury Villa",
-      location: "Madhapur",
-      rating: 4.9,
-      reviews: 143,
-      price: "₹5,500",
-      duration: "per night",
-      image: airbnbSuite,
-      features: ["Butler Service", "Chef-Prepared Meals", "Massage Therapy", "Private Pool"],
-      description: "The pinnacle of luxury pet accommodation. Features dedicated butler service, chef-prepared organic meals, therapeutic massage, and a private heated pool. Perfect for VIP pets.",
-      amenities: ["Butler Service", "Gourmet Kitchen", "Massage Therapy", "Private Pool", "Luxury Suites", "24/7 Monitoring"],
-      maxCapacity: "3 pets",
-      petTypes: "Dogs, Cats",
-      checkIn: "Flexible",
-      checkOut: "Flexible"
-    },
-    {
-      id: 6,
-      name: "Paws & Relax Inn",
-      type: "Boutique Stay",
-      location: "Kondapur",
-      rating: 4.6,
-      reviews: 72,
-      price: "₹1,800",
-      duration: "per night",
-      image: airbnbResort,
-      features: ["Cozy Rooms", "Daily Walks", "Treats Included", "Photo Updates"],
-      description: "Cozy boutique inn with a homely atmosphere. Perfect for first-time boarders. Includes multiple daily walks, photo updates, and plenty of love and attention.",
-      amenities: ["Cozy Environment", "Multiple Walks", "Photo Updates", "Treats", "Play Sessions", "Cuddle Time"],
-      maxCapacity: "5 pets",
-      petTypes: "Dogs, Cats, Rabbits",
-      checkIn: "10:00 AM",
-      checkOut: "11:00 AM"
-    }
-  ];
+  const petStays: any[] = [];
 
   return (
     <div className="min-h-screen">
@@ -142,8 +33,9 @@ const PetAirbnb = () => {
 
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {petStays.map((stay) => (
+          {petStays.length > 0 ? (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {petStays.map((stay) => (
               <Card key={stay.id}>
                 <CardHeader>
                   <img 
@@ -276,8 +168,14 @@ const PetAirbnb = () => {
                   </Dialog>
                 </CardFooter>
               </Card>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <h2 className="text-2xl font-semibold mb-2">No Pet Stays Available</h2>
+              <p className="text-muted-foreground">Check back soon for premium pet accommodation options.</p>
+            </div>
+          )}
         </div>
       </section>
     </div>
