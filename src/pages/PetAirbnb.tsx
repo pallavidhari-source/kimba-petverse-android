@@ -3,44 +3,83 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Star, Home, Calendar } from "lucide-react";
+import airbnbVilla from "@/assets/airbnb-villa.jpg";
+import airbnbSuite from "@/assets/airbnb-suite.jpg";
+import airbnbResort from "@/assets/airbnb-resort.jpg";
 
 const PetAirbnb = () => {
   const petStays = [
     {
       id: 1,
-      name: "Cozy Pet Villa",
-      type: "Entire Home",
+      name: "Luxe Pet Villa",
+      type: "Entire Villa",
       location: "Banjara Hills",
       rating: 4.9,
-      reviews: 45,
-      price: "₹2,500",
+      reviews: 127,
+      price: "₹3,500",
       duration: "per night",
-      image: "/placeholder.svg",
-      features: ["Pet-Safe Garden", "24/7 Care", "Premium Food"]
+      image: airbnbVilla,
+      features: ["Private Garden", "24/7 Care", "Gourmet Meals", "Webcam Access"]
     },
     {
       id: 2,
-      name: "Luxury Pet Suite",
-      type: "Private Room",
+      name: "VIP Pet Suite",
+      type: "Private Suite",
       location: "Jubilee Hills",
       rating: 4.8,
-      reviews: 32,
-      price: "₹1,800",
+      reviews: 89,
+      price: "₹2,200",
       duration: "per night",
-      image: "/placeholder.svg",
-      features: ["AC Room", "Playtime", "Vet on Call"]
+      image: airbnbSuite,
+      features: ["Climate Control", "Premium Bedding", "Vet on Call", "Daily Updates"]
     },
     {
       id: 3,
       name: "Pet Paradise Resort",
-      type: "Entire Home",
+      type: "Resort Stay",
       location: "Hitech City",
       rating: 5.0,
-      reviews: 67,
-      price: "₹3,200",
+      reviews: 215,
+      price: "₹4,800",
       duration: "per night",
-      image: "/placeholder.svg",
-      features: ["Pool Access", "Grooming", "Training Sessions"]
+      image: airbnbResort,
+      features: ["Pool Access", "Spa & Grooming", "Training Sessions", "Play Park"]
+    },
+    {
+      id: 4,
+      name: "Comfort Pet Lodge",
+      type: "Shared Space",
+      location: "Gachibowli",
+      rating: 4.7,
+      reviews: 56,
+      price: "₹1,500",
+      duration: "per night",
+      image: airbnbVilla,
+      features: ["Socialization", "Group Play", "Standard Care", "Indoor/Outdoor"]
+    },
+    {
+      id: 5,
+      name: "Royal Pet Mansion",
+      type: "Luxury Villa",
+      location: "Madhapur",
+      rating: 4.9,
+      reviews: 143,
+      price: "₹5,500",
+      duration: "per night",
+      image: airbnbSuite,
+      features: ["Butler Service", "Chef-Prepared Meals", "Massage Therapy", "Private Pool"]
+    },
+    {
+      id: 6,
+      name: "Paws & Relax Inn",
+      type: "Boutique Stay",
+      location: "Kondapur",
+      rating: 4.6,
+      reviews: 72,
+      price: "₹1,800",
+      duration: "per night",
+      image: airbnbResort,
+      features: ["Cozy Rooms", "Daily Walks", "Treats Included", "Photo Updates"]
     }
   ];
 
