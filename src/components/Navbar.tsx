@@ -15,6 +15,7 @@ export const Navbar = () => {
   const [isHost, setIsHost] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [roles, setRoles] = useState<string[]>([]);
+  const [logoClicked, setLogoClicked] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -92,7 +93,19 @@ export const Navbar = () => {
     <nav className="sticky top-0 z-50 w-full border-b bg-card/80 backdrop-blur-lg">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-3">
-          <img src={kimbaLogo} alt="Kimba Petverse" className="h-12 w-12 rounded-xl object-cover shadow-md" />
+          <img 
+            src={kimbaLogo} 
+            alt="Kimba Petverse" 
+            className={`h-12 w-12 rounded-xl object-cover shadow-md transition-transform duration-300 cursor-pointer ${logoClicked ? 'scale-125' : 'hover:scale-110'}`}
+            onClick={(e) => {
+              e.preventDefault();
+              setLogoClicked(true);
+              setTimeout(() => {
+                setLogoClicked(false);
+                navigate('/');
+              }, 300);
+            }}
+          />
           <span className="text-xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">Kimba Petverse</span>
         </Link>
 
