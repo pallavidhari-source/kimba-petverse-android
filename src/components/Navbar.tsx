@@ -120,7 +120,7 @@ export const Navbar = () => {
             Cafes
           </Link>
           <Link to="/pet-airbnb" className="text-sm font-medium transition-colors hover:text-primary">
-            Pet Airbnb
+            Kimba Pet Stays
           </Link>
           {user && (
             <Link to="/wallet" className="text-sm font-medium transition-colors hover:text-primary">
@@ -237,7 +237,7 @@ export const Navbar = () => {
                 Cafes
               </Link>
               <Link to="/pet-airbnb" className="text-lg font-medium">
-                Pet Airbnb
+                Kimba Pet Stays
               </Link>
               {user && (
                 <Link to="/wallet" className="text-lg font-medium">

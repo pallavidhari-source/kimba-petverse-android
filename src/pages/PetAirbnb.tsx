@@ -131,7 +131,7 @@ const PetAirbnb = () => {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-primary-foreground md:text-5xl mb-4">
-              Pet Airbnb
+              Kimba Pet Stays
             </h1>
             <p className="text-lg text-primary-foreground/90 max-w-2xl mx-auto">
               Book premium stays for your pets while you're away. Trusted homes with verified pet care.
