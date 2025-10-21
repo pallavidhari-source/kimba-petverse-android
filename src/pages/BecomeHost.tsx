@@ -7,9 +7,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Upload } from "lucide-react";
+import { Upload, CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
 
 const timeSlots = [
   "11:00 AM - 12:00 PM",
@@ -31,6 +33,7 @@ const BecomeHost = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [selectedDates, setSelectedDates] = useState<Date[] | undefined>();
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
   const [kycDocument, setKycDocument] = useState<File | null>(null);
   const [vaccinationCert, setVaccinationCert] = useState<File | null>(null);
@@ -78,6 +81,11 @@ const BecomeHost = () => {
       const petName = formData.get("petName") as string;
       const petType = formData.get("petType") as string;
       const petGender = formData.get("petGender") as string;
+
+      if (!selectedDates || selectedDates.length === 0) {
+        toast.error("Please select at least one date");
+        return;
+      }
 
       if (selectedTimeSlots.length === 0) {
         toast.error("Please select at least one time slot");
@@ -221,24 +229,55 @@ const BecomeHost = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Available Time Slots (Select multiple)</Label>
-                <div className="grid grid-cols-2 gap-2 rounded-lg border p-4">
-                  {timeSlots.map((slot) => (
-                    <button
-                      key={slot}
-                      type="button"
-                      onClick={() => toggleTimeSlot(slot)}
-                      className={`rounded-md px-3 py-2 text-sm transition-colors ${
-                        selectedTimeSlots.includes(slot)
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted hover:bg-muted/80"
-                      }`}
-                    >
-                      {slot}
-                    </button>
-                  ))}
+                <Label>Select Available Dates</Label>
+                <div className="rounded-lg border p-4">
+                  <Calendar
+                    mode="multiple"
+                    selected={selectedDates}
+                    onSelect={setSelectedDates}
+                    className="rounded-md pointer-events-auto"
+                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                  />
+                  {selectedDates && selectedDates.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      <p className="text-sm font-medium">Selected Dates:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedDates.map((date, idx) => (
+                          <span
+                            key={idx}
+                            className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-2 py-1 text-xs"
+                          >
+                            <CalendarIcon className="h-3 w-3" />
+                            {format(date, "PPP")}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
+
+              {selectedDates && selectedDates.length > 0 && (
+                <div className="space-y-2">
+                  <Label>Available Time Slots (Select multiple)</Label>
+                  <div className="grid grid-cols-2 gap-2 rounded-lg border p-4">
+                    {timeSlots.map((slot) => (
+                      <button
+                        key={slot}
+                        type="button"
+                        onClick={() => toggleTimeSlot(slot)}
+                        className={`rounded-md px-3 py-2 text-sm transition-colors ${
+                          selectedTimeSlots.includes(slot)
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted hover:bg-muted/80"
+                        }`}
+                      >
+                        {slot}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label htmlFor="kycDocument">KYC Document (Aadhaar/PAN/DL)</Label>
