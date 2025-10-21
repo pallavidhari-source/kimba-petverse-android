@@ -19,6 +19,7 @@ import RegisterPet from "./pages/RegisterPet";
 import HostDashboard from "./pages/HostDashboard";
 import PetAirbnb from "./pages/PetAirbnb";
 import PetCemeteries from "./pages/PetCemeteries";
+import PetParties from "./pages/PetParties";
 import NotFound from "./pages/NotFound";
 import CreatePetStay from "./pages/CreatePetStay";
 import kimbaLogo from "./assets/kimba-logo.png";
@@ -50,6 +51,7 @@ const App = () => (
           <Route path="/cafes" element={<Cafes />} />
           <Route path="/pet-airbnb" element={<PetAirbnb />} />
           <Route path="/pet-cemeteries" element={<PetCemeteries />} />
+          <Route path="/pet-parties" element={<PetParties />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/become-host" element={<BecomeHost />} />
           <Route path="/admin" element={<Admin />} />
