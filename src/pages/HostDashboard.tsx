@@ -6,7 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { PawPrint, Plus, Pencil, Trash2, Loader2, MapPin, IndianRupee } from "lucide-react";
+import { PawPrint, Plus, Pencil, Trash2, Loader2, MapPin, IndianRupee, Calendar } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { format } from "date-fns";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,10 +36,22 @@ interface Pet {
   created_at: string;
 }
 
+interface HostApplication {
+  id: string;
+  full_name: string;
+  phone: string;
+  pet_name: string;
+  pet_type: string;
+  available_dates_slots: Record<string, string[]>;
+  status: string;
+  created_at: string;
+}
+
 const HostDashboard = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [pets, setPets] = useState<Pet[]>([]);
+  const [hostApplication, setHostApplication] = useState<HostApplication | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
 
@@ -70,11 +84,31 @@ const HostDashboard = () => {
       }
 
       await loadPets(session.user.id);
+      await loadHostApplication(session.user.id);
     } catch (error: any) {
       console.error("Error:", error);
       toast.error("Failed to load dashboard");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadHostApplication = async (userId: string) => {
+    const { data, error } = await supabase
+      .from("host_applications")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Failed to load host application:", error);
+      return;
+    }
+
+    if (data) {
+      setHostApplication(data as HostApplication);
     }
   };
 
@@ -130,7 +164,73 @@ const HostDashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 space-y-6">
+        {hostApplication && (
+          <Card className="shadow-medium">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                    <Calendar className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl">Availability Schedule</CardTitle>
+                    <CardDescription>Your registered availability for pet hosting</CardDescription>
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => navigate(`/become-host?edit=${hostApplication.id}`)}
+                  variant="outline"
+                  className="gap-2"
+                >
+                  <Pencil className="h-4 w-4" />
+                  Edit Schedule
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {hostApplication.available_dates_slots && 
+               Object.keys(hostApplication.available_dates_slots).length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Available Time Slots</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {Object.entries(hostApplication.available_dates_slots)
+                      .sort(([a], [b]) => a.localeCompare(b))
+                      .map(([dateKey, slots]) => (
+                        <TableRow key={dateKey}>
+                          <TableCell className="font-medium">
+                            {format(new Date(dateKey), "PPP")}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex flex-wrap gap-2">
+                              {(slots as string[]).map((slot, idx) => (
+                                <span
+                                  key={idx}
+                                  className="inline-block rounded-md bg-primary/10 px-3 py-1 text-sm"
+                                >
+                                  {slot}
+                                </span>
+                              ))}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <p className="text-center text-muted-foreground py-8">
+                  No availability schedule set yet
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
         <Card className="shadow-medium">
           <CardHeader>
             <div className="flex items-center justify-between">

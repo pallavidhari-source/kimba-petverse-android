@@ -124,6 +124,7 @@ export type Database = {
       host_applications: {
         Row: {
           admin_notes: string | null
+          available_dates_slots: Json | null
           available_time_slots: string[] | null
           created_at: string | null
           full_name: string
@@ -142,6 +143,7 @@ export type Database = {
         }
         Insert: {
           admin_notes?: string | null
+          available_dates_slots?: Json | null
           available_time_slots?: string[] | null
           created_at?: string | null
           full_name: string
@@ -160,6 +162,7 @@ export type Database = {
         }
         Update: {
           admin_notes?: string | null
+          available_dates_slots?: Json | null
           available_time_slots?: string[] | null
           created_at?: string | null
           full_name?: string

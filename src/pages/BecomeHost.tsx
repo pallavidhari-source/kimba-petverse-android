@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,9 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Upload, CalendarIcon } from "lucide-react";
+import { CalendarIcon, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 
 const timeSlots = [
@@ -31,10 +32,13 @@ const timeSlots = [
 
 const BecomeHost = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const applicationId = searchParams.get('edit');
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
-  const [selectedDates, setSelectedDates] = useState<Date[] | undefined>();
-  const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
+  const [currentDate, setCurrentDate] = useState<Date | undefined>();
+  const [currentTimeSlots, setCurrentTimeSlots] = useState<string[]>([]);
+  const [dateTimeSlotsMap, setDateTimeSlotsMap] = useState<Record<string, string[]>>({});
   const [kycDocument, setKycDocument] = useState<File | null>(null);
   const [vaccinationCert, setVaccinationCert] = useState<File | null>(null);
   const [petImages, setPetImages] = useState<File[]>([]);
@@ -46,15 +50,77 @@ const BecomeHost = () => {
         return;
       }
       setUser(session.user);
+      
+      // Load existing application if editing
+      if (applicationId) {
+        loadApplication(applicationId);
+      }
     });
-  }, [navigate]);
+  }, [navigate, applicationId]);
+
+  const loadApplication = async (id: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("host_applications")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        // Pre-fill form fields
+        (document.getElementById("fullName") as HTMLInputElement).value = data.full_name || "";
+        (document.getElementById("phone") as HTMLInputElement).value = data.phone || "";
+        (document.getElementById("petName") as HTMLInputElement).value = data.pet_name || "";
+        
+        // Load date-time slots map
+        if (data.available_dates_slots) {
+          setDateTimeSlotsMap(data.available_dates_slots as Record<string, string[]>);
+        }
+      }
+    } catch (error: any) {
+      toast.error("Failed to load application");
+      console.error(error);
+    }
+  };
 
   const toggleTimeSlot = (slot: string) => {
-    setSelectedTimeSlots(prev =>
+    setCurrentTimeSlots(prev =>
       prev.includes(slot)
         ? prev.filter(s => s !== slot)
         : [...prev, slot]
     );
+  };
+
+  const addDateWithSlots = () => {
+    if (!currentDate) {
+      toast.error("Please select a date first");
+      return;
+    }
+    if (currentTimeSlots.length === 0) {
+      toast.error("Please select at least one time slot");
+      return;
+    }
+
+    const dateKey = format(currentDate, "yyyy-MM-dd");
+    setDateTimeSlotsMap(prev => ({
+      ...prev,
+      [dateKey]: currentTimeSlots
+    }));
+    
+    // Reset selections
+    setCurrentDate(undefined);
+    setCurrentTimeSlots([]);
+    toast.success("Date and time slots added");
+  };
+
+  const removeDateSlots = (dateKey: string) => {
+    setDateTimeSlotsMap(prev => {
+      const newMap = { ...prev };
+      delete newMap[dateKey];
+      return newMap;
+    });
   };
 
   const uploadFile = async (file: File, bucket: string, path: string) => {
@@ -82,13 +148,8 @@ const BecomeHost = () => {
       const petType = formData.get("petType") as string;
       const petGender = formData.get("petGender") as string;
 
-      if (!selectedDates || selectedDates.length === 0) {
-        toast.error("Please select at least one date");
-        return;
-      }
-
-      if (selectedTimeSlots.length === 0) {
-        toast.error("Please select at least one time slot");
+      if (Object.keys(dateTimeSlotsMap).length === 0) {
+        toast.error("Please add at least one date with time slots");
         return;
       }
 
@@ -126,24 +187,46 @@ const BecomeHost = () => {
       );
 
       // Submit application
-      const { error } = await supabase.from("host_applications").insert({
-        user_id: user.id,
-        full_name: fullName,
-        phone,
-        pet_name: petName,
-        pet_type: petType,
-        pet_gender: petGender,
-        available_time_slots: selectedTimeSlots,
-        kyc_document_url: kycUrl,
-        vaccination_certificate_url: vaccinationUrl,
-        pet_images_urls: petImageUrls,
-        status: "pending",
-      });
+      if (applicationId) {
+        // Update existing application
+        const { error } = await supabase
+          .from("host_applications")
+          .update({
+            full_name: fullName,
+            phone,
+            pet_name: petName,
+            pet_type: petType,
+            pet_gender: petGender,
+            available_dates_slots: dateTimeSlotsMap,
+            kyc_document_url: kycUrl,
+            vaccination_certificate_url: vaccinationUrl,
+            pet_images_urls: petImageUrls,
+          })
+          .eq("id", applicationId);
 
-      if (error) throw error;
+        if (error) throw error;
+        toast.success("Application updated successfully!");
+      } else {
+        // Create new application
+        const { error } = await supabase.from("host_applications").insert({
+          user_id: user.id,
+          full_name: fullName,
+          phone,
+          pet_name: petName,
+          pet_type: petType,
+          pet_gender: petGender,
+          available_dates_slots: dateTimeSlotsMap,
+          kyc_document_url: kycUrl,
+          vaccination_certificate_url: vaccinationUrl,
+          pet_images_urls: petImageUrls,
+          status: "pending",
+        });
 
-      toast.success("Application submitted successfully! We'll review it soon.");
-      navigate("/");
+        if (error) throw error;
+        toast.success("Application submitted successfully! We'll review it soon.");
+      }
+      
+      navigate("/host-dashboard");
     } catch (error: any) {
       toast.error(error.message || "Failed to submit application");
     } finally {
@@ -229,37 +312,25 @@ const BecomeHost = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Select Available Dates</Label>
+                <Label>Select Available Date</Label>
                 <div className="rounded-lg border p-4">
                   <Calendar
-                    mode="multiple"
-                    selected={selectedDates}
-                    onSelect={setSelectedDates}
+                    mode="single"
+                    selected={currentDate}
+                    onSelect={setCurrentDate}
                     className="rounded-md pointer-events-auto"
-                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                    disabled={(date) => {
+                      const dateKey = format(date, "yyyy-MM-dd");
+                      return date < new Date(new Date().setHours(0, 0, 0, 0)) || 
+                             dateKey in dateTimeSlotsMap;
+                    }}
                   />
-                  {selectedDates && selectedDates.length > 0 && (
-                    <div className="mt-4 space-y-2">
-                      <p className="text-sm font-medium">Selected Dates:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedDates.map((date, idx) => (
-                          <span
-                            key={idx}
-                            className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-2 py-1 text-xs"
-                          >
-                            <CalendarIcon className="h-3 w-3" />
-                            {format(date, "PPP")}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
 
-              {selectedDates && selectedDates.length > 0 && (
+              {currentDate && (
                 <div className="space-y-2">
-                  <Label>Available Time Slots (Select multiple)</Label>
+                  <Label>Available Time Slots for {format(currentDate, "PPP")}</Label>
                   <div className="grid grid-cols-2 gap-2 rounded-lg border p-4">
                     {timeSlots.map((slot) => (
                       <button
@@ -267,7 +338,7 @@ const BecomeHost = () => {
                         type="button"
                         onClick={() => toggleTimeSlot(slot)}
                         className={`rounded-md px-3 py-2 text-sm transition-colors ${
-                          selectedTimeSlots.includes(slot)
+                          currentTimeSlots.includes(slot)
                             ? "bg-primary text-primary-foreground"
                             : "bg-muted hover:bg-muted/80"
                         }`}
@@ -275,6 +346,64 @@ const BecomeHost = () => {
                         {slot}
                       </button>
                     ))}
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={addDateWithSlots}
+                    className="w-full"
+                    disabled={currentTimeSlots.length === 0}
+                  >
+                    Add Date with Selected Time Slots
+                  </Button>
+                </div>
+              )}
+
+              {Object.keys(dateTimeSlotsMap).length > 0 && (
+                <div className="space-y-2">
+                  <Label>Selected Availability Schedule</Label>
+                  <div className="rounded-lg border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Time Slots</TableHead>
+                          <TableHead className="w-[50px]">Action</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {Object.entries(dateTimeSlotsMap)
+                          .sort(([a], [b]) => a.localeCompare(b))
+                          .map(([dateKey, slots]) => (
+                            <TableRow key={dateKey}>
+                              <TableCell className="font-medium">
+                                {format(new Date(dateKey), "PPP")}
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex flex-wrap gap-1">
+                                  {slots.map((slot, idx) => (
+                                    <span
+                                      key={idx}
+                                      className="inline-block rounded-md bg-primary/10 px-2 py-1 text-xs"
+                                    >
+                                      {slot}
+                                    </span>
+                                  ))}
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => removeDateSlots(dateKey)}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
                   </div>
                 </div>
               )}
@@ -331,7 +460,7 @@ const BecomeHost = () => {
               </div>
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Submitting Application..." : "Submit Application"}
+                {loading ? (applicationId ? "Updating..." : "Submitting...") : (applicationId ? "Update Application" : "Submit Application")}
               </Button>
             </form>
           </CardContent>
