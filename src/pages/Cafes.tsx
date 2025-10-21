@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Star, Coffee, Clock } from "lucide-react";
+import cafePawsome from "@/assets/cafe-pawsome.jpg";
+import cafeFurry from "@/assets/cafe-furry.jpg";
+import cafeWoof from "@/assets/cafe-woof.jpg";
 
 const Cafes = () => {
   const petCafes = [
@@ -14,7 +17,7 @@ const Cafes = () => {
       rating: 4.8,
       speciality: "Specialty Coffee & Treats",
       hours: "9 AM - 9 PM",
-      image: "/placeholder.svg",
+      image: cafePawsome,
       features: ["Pet-Friendly", "Outdoor Seating", "Wi-Fi"]
     },
     {
@@ -25,7 +28,7 @@ const Cafes = () => {
       rating: 4.9,
       speciality: "Japanese Style Cat Cafe",
       hours: "10 AM - 10 PM",
-      image: "/placeholder.svg",
+      image: cafeFurry,
       features: ["Adoptable Cats", "Books", "Board Games"]
     },
     {
@@ -36,7 +39,7 @@ const Cafes = () => {
       rating: 4.7,
       speciality: "All Pets Welcome",
       hours: "8 AM - 11 PM",
-      image: "/placeholder.svg",
+      image: cafeWoof,
       features: ["Pet Menu", "Play Area", "Photo Booth"]
     }
   ];
