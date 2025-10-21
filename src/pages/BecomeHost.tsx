@@ -30,6 +30,31 @@ const timeSlots = [
   "11:00 PM - 12:00 AM",
 ];
 
+const parseTimeSlot = (slot: string): number => {
+  const startTime = slot.split(" - ")[0];
+  const [time, period] = startTime.split(" ");
+  let [hours, minutes] = time.split(":").map(Number);
+  
+  if (period === "PM" && hours !== 12) hours += 12;
+  if (period === "AM" && hours === 12) hours = 0;
+  
+  return hours * 60 + minutes;
+};
+
+const isSlotDisabled = (slot: string, selectedDate: Date | undefined): boolean => {
+  if (!selectedDate) return false;
+  
+  const today = new Date();
+  const isToday = format(selectedDate, "yyyy-MM-dd") === format(today, "yyyy-MM-dd");
+  
+  if (!isToday) return false;
+  
+  const currentMinutes = today.getHours() * 60 + today.getMinutes();
+  const slotMinutes = parseTimeSlot(slot);
+  
+  return slotMinutes < currentMinutes;
+};
+
 const BecomeHost = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -332,20 +357,26 @@ const BecomeHost = () => {
                 <div className="space-y-2">
                   <Label>Available Time Slots for {format(currentDate, "PPP")}</Label>
                   <div className="grid grid-cols-2 gap-2 rounded-lg border p-4">
-                    {timeSlots.map((slot) => (
-                      <button
-                        key={slot}
-                        type="button"
-                        onClick={() => toggleTimeSlot(slot)}
-                        className={`rounded-md px-3 py-2 text-sm transition-colors ${
-                          currentTimeSlots.includes(slot)
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted hover:bg-muted/80"
-                        }`}
-                      >
-                        {slot}
-                      </button>
-                    ))}
+                    {timeSlots.map((slot) => {
+                      const disabled = isSlotDisabled(slot, currentDate);
+                      return (
+                        <button
+                          key={slot}
+                          type="button"
+                          onClick={() => !disabled && toggleTimeSlot(slot)}
+                          disabled={disabled}
+                          className={`rounded-md px-3 py-2 text-sm transition-colors ${
+                            disabled
+                              ? "bg-muted/50 text-muted-foreground/50 cursor-not-allowed"
+                              : currentTimeSlots.includes(slot)
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-muted hover:bg-muted/80"
+                          }`}
+                        >
+                          {slot}
+                        </button>
+                      );
+                    })}
                   </div>
                   <Button
                     type="button"
