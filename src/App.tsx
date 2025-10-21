@@ -21,6 +21,7 @@ import PetAirbnb from "./pages/PetAirbnb";
 import PetCemeteries from "./pages/PetCemeteries";
 import NotFound from "./pages/NotFound";
 import CreatePetStay from "./pages/CreatePetStay";
+import kimbaLogo from "./assets/kimba-logo.png";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,14 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      {/* Watermark */}
+      <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-0">
+        <img 
+          src={kimbaLogo} 
+          alt="Kimba Watermark" 
+          className="w-96 h-96 object-contain opacity-[0.03]"
+        />
+      </div>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
