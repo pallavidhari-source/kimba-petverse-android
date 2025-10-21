@@ -93,7 +93,7 @@ export const Navbar = () => {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-3">
           <img src={kimbaLogo} alt="Kimba Petverse" className="h-12 w-12 rounded-xl object-cover shadow-md" />
-          <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Kimba Petverse</span>
+          <span className="text-xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">Kimba Petverse</span>
         </Link>
 
         {/* Desktop Navigation */}
