@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { Link } from "react-router-dom";
 import { Heart, Shield, Star, Clock, Sparkles, Home, ShoppingBag, Stethoscope, Scissors, Coffee, Wallet } from "lucide-react";
 import heroImage from "@/assets/hero-pets.jpg";
@@ -164,13 +165,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t py-8">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>&copy; 2024 Kimba Petverse. All rights reserved.</p>
-          <p className="mt-2">Be Petself. 🐾</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
