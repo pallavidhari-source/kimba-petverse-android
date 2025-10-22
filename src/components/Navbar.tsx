@@ -8,6 +8,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import kimbaLogo from "@/assets/kimba-logo.png";
+import { CartDrawer } from "@/components/CartDrawer";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -154,6 +155,7 @@ export const Navbar = () => {
                   Host Dashboard
                 </Link>
               )}
+              <CartDrawer />
               <HoverCard>
                 <HoverCardTrigger asChild>
                   <Button variant="outline" size="icon" className="rounded-full">
@@ -219,9 +221,12 @@ export const Navbar = () => {
               </HoverCard>
             </>
           ) : (
-            <Link to="/auth">
-              <Button>Sign In</Button>
-            </Link>
+            <>
+              <CartDrawer />
+              <Link to="/auth">
+                <Button>Sign In</Button>
+              </Link>
+            </>
           )}
         </div>
 

@@ -22,6 +22,7 @@ import PetCemeteries from "./pages/PetCemeteries";
 import PetParties from "./pages/PetParties";
 import NotFound from "./pages/NotFound";
 import CreatePetStay from "./pages/CreatePetStay";
+import ProductDetail from "./pages/ProductDetail";
 import kimbaLogo from "./assets/kimba-logo.png";
 
 const queryClient = new QueryClient();
@@ -59,6 +60,7 @@ const App = () => (
           <Route path="/register-pet" element={<RegisterPet />} />
           <Route path="/host-dashboard" element={<HostDashboard />} />
           <Route path="/create-pet-stay" element={<CreatePetStay />} />
+          <Route path="/product/:handle" element={<ProductDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
