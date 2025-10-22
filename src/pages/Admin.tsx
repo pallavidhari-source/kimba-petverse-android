@@ -15,15 +15,10 @@ interface HostApplication {
   user_id: string;
   full_name: string;
   phone: string;
-  pet_name: string;
-  pet_type: string;
-  pet_gender: string;
-  available_time_slots: string[];
   status: "pending" | "approved" | "rejected";
   created_at: string;
   kyc_document_url: string;
-  vaccination_certificate_url: string;
-  pet_images_urls: string[];
+  selfie_url: string;
   admin_notes: string | null;
 }
 
@@ -235,77 +230,84 @@ const Admin = () => {
           </TabsList>
 
           <TabsContent value="hosts" className="space-y-4">
-            {hostApplications.map((app) => (
-              <Card key={app.id}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle>{app.full_name}</CardTitle>
-                      <CardDescription>
-                        Pet: {app.pet_name} ({app.pet_type})
-                      </CardDescription>
-                    </div>
-                    <Badge variant={app.status === "pending" ? "secondary" : app.status === "approved" ? "default" : "destructive"}>
-                      {app.status}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid gap-2 text-sm">
-                    <p><strong>Phone:</strong> {app.phone}</p>
-                    <p><strong>Gender:</strong> {app.pet_gender}</p>
-                    <p><strong>Time Slots:</strong> {app.available_time_slots.join(", ")}</p>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Documents:</Label>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => viewDocument(app.kyc_document_url)}>
-                        View KYC
-                      </Button>
-                      <Button variant="outline" size="sm" onClick={() => viewDocument(app.vaccination_certificate_url)}>
-                        View Vaccination
-                      </Button>
-                      {app.pet_images_urls.map((url, idx) => (
-                        <Button key={idx} variant="outline" size="sm" onClick={() => viewDocument(url)}>
-                          Pet Image {idx + 1}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {app.status === "pending" && (
-                    <>
-                      <div className="space-y-2">
-                        <Label>Admin Notes</Label>
-                        <Textarea
-                          placeholder="Add notes about this application..."
-                          value={selectedApp?.id === app.id ? adminNotes : ""}
-                          onChange={(e) => {
-                            setSelectedApp(app);
-                            setAdminNotes(e.target.value);
-                          }}
-                        />
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={() => updateApplicationStatus(app.id, "approved")}
-                          className="bg-green-600 hover:bg-green-700"
-                        >
-                          Approve
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          onClick={() => updateApplicationStatus(app.id, "rejected")}
-                        >
-                          Reject
-                        </Button>
-                      </div>
-                    </>
-                  )}
+            {hostApplications.length === 0 ? (
+              <Card>
+                <CardContent className="py-8 text-center text-muted-foreground">
+                  No host applications yet
                 </CardContent>
               </Card>
-            ))}
+            ) : (
+              hostApplications.map((app) => (
+                <Card key={app.id}>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle>{app.full_name}</CardTitle>
+                        <CardDescription>
+                          Applied: {new Date(app.created_at).toLocaleDateString()}
+                        </CardDescription>
+                      </div>
+                      <Badge variant={app.status === "pending" ? "secondary" : app.status === "approved" ? "default" : "destructive"}>
+                        {app.status}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid gap-2 text-sm">
+                      <p><strong>Phone:</strong> {app.phone}</p>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label>Documents:</Label>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" onClick={() => viewDocument(app.kyc_document_url)}>
+                          View KYC Document
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => viewDocument(app.selfie_url)}>
+                          View Selfie with ID
+                        </Button>
+                      </div>
+                    </div>
+
+                    {app.admin_notes && (
+                      <div className="p-3 bg-muted rounded-md">
+                        <p className="text-sm"><strong>Admin Notes:</strong> {app.admin_notes}</p>
+                      </div>
+                    )}
+
+                    {app.status === "pending" && (
+                      <>
+                        <div className="space-y-2">
+                          <Label>Admin Notes</Label>
+                          <Textarea
+                            placeholder="Add notes about this application..."
+                            value={selectedApp?.id === app.id ? adminNotes : ""}
+                            onChange={(e) => {
+                              setSelectedApp(app);
+                              setAdminNotes(e.target.value);
+                            }}
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={() => updateApplicationStatus(app.id, "approved")}
+                            className="bg-green-600 hover:bg-green-700"
+                          >
+                            Approve
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            onClick={() => updateApplicationStatus(app.id, "rejected")}
+                          >
+                            Reject
+                          </Button>
+                        </div>
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </TabsContent>
 
           <TabsContent value="bookings" className="space-y-4">
