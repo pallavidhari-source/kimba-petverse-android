@@ -239,6 +239,22 @@ export const Navbar = () => {
                         </Link>
                       </NavigationMenuLink>
                     </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          to="/pet-cemeteries"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+                            <Heart className="h-4 w-4" />
+                            Pet Memorial
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            Honor your beloved companions
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
@@ -279,22 +295,6 @@ export const Navbar = () => {
                           </div>
                           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                             Celebrate with your pets
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          to="/pet-cemeteries"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
-                            <Heart className="h-4 w-4" />
-                            Pet Memorial
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Honor your beloved companions
                           </p>
                         </Link>
                       </NavigationMenuLink>
@@ -527,6 +527,10 @@ export const Navbar = () => {
                     <Scissors className="h-4 w-4" />
                     Grooming
                   </Link>
+                  <Link to="/pet-cemeteries" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                    <Heart className="h-4 w-4" />
+                    Pet Memorial
+                  </Link>
                 </div>
               </div>
 
@@ -543,10 +547,6 @@ export const Navbar = () => {
                   <Link to="/pet-parties" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
                     <PartyPopper className="h-4 w-4" />
                     Pet Pawrties
-                  </Link>
-                  <Link to="/pet-cemeteries" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <Heart className="h-4 w-4" />
-                    Pet Memorial
                   </Link>
                   <Link to="/cafes" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
                     <Coffee className="h-4 w-4" />
