@@ -196,17 +196,6 @@ export const Navbar = () => {
                       )}
                     </div>
 
-                    {isHost && (
-                      <Button
-                        variant="outline"
-                        onClick={() => navigate("/register-pet")}
-                        className="w-full"
-                        size="sm"
-                      >
-                        Register Pet
-                      </Button>
-                    )}
-
                     <Button
                       onClick={handleSignOut}
                       variant="destructive"
