@@ -167,6 +167,7 @@ const Explore = () => {
                 isVaccinated={pet.is_vaccinated}
                 isKidFriendly={pet.is_kid_friendly}
                 temperament={pet.temperament}
+                hostId={pet.host_id}
               />
             ))}
           </div>
