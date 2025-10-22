@@ -37,6 +37,14 @@ const Auth = () => {
     const fullName = formData.get("fullName") as string;
     const phone = formData.get("phone") as string;
 
+    // Check if this is an admin email - admins cannot sign up through regular auth
+    if (email.toLowerCase().trim() === 'pallavidhari@gmail.com') {
+      toast.error("Admin accounts must be created through /admin");
+      setLoading(false);
+      navigate("/admin");
+      return;
+    }
+
     // Check if email is allowed
     if (!isEmailAllowed(email)) {
       toast.error("This email is not authorized to access this application during development.");
@@ -94,6 +102,14 @@ const Auth = () => {
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+
+    // Check if this is an admin email - admins must use /admin
+    if (email.toLowerCase().trim() === 'pallavidhari@gmail.com') {
+      toast.error("Admin accounts must sign in through /admin");
+      setLoading(false);
+      navigate("/admin");
+      return;
+    }
 
     // Check if email is allowed
     if (!isEmailAllowed(email)) {
