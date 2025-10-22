@@ -123,11 +123,11 @@ export const Navbar = () => {
         <div className="hidden items-center gap-4 lg:flex">
           <NavigationMenu>
             <NavigationMenuList>
-              {/* Experiences */}
+              {/* Pets */}
               <NavigationMenuItem>
                 <NavigationMenuTrigger className="text-sm font-medium">
                   <PawPrint className="h-4 w-4 mr-1" />
-                  Experiences
+                  Pets
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 bg-card">
@@ -488,10 +488,10 @@ export const Navbar = () => {
             </SheetTrigger>
           <SheetContent className="overflow-y-auto">
             <div className="flex flex-col gap-6 pt-8">
-              {/* Experiences Section */}
+              {/* Pets Section */}
               <div>
                 <h3 className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                  Experiences
+                  Pets
                 </h3>
                 <div className="flex flex-col gap-2">
                   <Link to="/explore" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
