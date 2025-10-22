@@ -115,6 +115,9 @@ export const Navbar = () => {
           <Link to="/explore" className="text-sm font-medium transition-colors hover:text-primary">
             Explore
           </Link>
+          <Link to="/explore" className="text-sm font-medium transition-colors hover:text-primary">
+            Pet Experience
+          </Link>
           <Link to="/adopt" className="text-sm font-medium transition-colors hover:text-primary">
             Adopt
           </Link>
@@ -141,6 +144,9 @@ export const Navbar = () => {
           </Link>
           <Link to="/pet-parties" className="text-sm font-medium transition-colors hover:text-primary">
             Pet Pawrties
+          </Link>
+          <Link to="/become-host" className="text-sm font-medium transition-colors hover:text-primary">
+            Become Host
           </Link>
           {user && (
             <Link to="/wallet" className="text-sm font-medium transition-colors hover:text-primary">
@@ -231,6 +237,9 @@ export const Navbar = () => {
               <Link to="/explore" className="text-lg font-medium">
                 Explore
               </Link>
+              <Link to="/explore" className="text-lg font-medium">
+                Pet Experience
+              </Link>
               <Link to="/adopt" className="text-lg font-medium">
                 Adopt
               </Link>
@@ -257,6 +266,9 @@ export const Navbar = () => {
               </Link>
               <Link to="/pet-parties" className="text-lg font-medium">
                 Pet Pawrties
+              </Link>
+              <Link to="/become-host" className="text-lg font-medium">
+                Become Host
               </Link>
               {user && (
                 <Link to="/wallet" className="text-lg font-medium">
