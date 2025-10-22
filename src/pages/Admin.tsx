@@ -133,6 +133,20 @@ const Admin = () => {
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      toast.success("Signed out successfully");
+      setIsAuthenticated(false);
+      setIsAdmin(false);
+      navigate("/");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to sign out");
+    }
+  };
+
   const updateApplicationStatus = async (appId: string, status: "approved" | "rejected") => {
     try {
       const { error } = await supabase
@@ -218,7 +232,7 @@ const Admin = () => {
       <div className="container mx-auto">
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <Button variant="outline" onClick={() => supabase.auth.signOut()}>
+          <Button variant="outline" onClick={handleSignOut}>
             Sign Out
           </Button>
         </div>
