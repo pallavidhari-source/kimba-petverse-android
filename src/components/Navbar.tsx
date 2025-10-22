@@ -156,9 +156,13 @@ export const Navbar = () => {
           )}
           {user ? (
             <>
-              {isHost && (
+              {isHost ? (
                 <Link to="/host-dashboard" className="text-sm font-medium transition-colors hover:text-primary">
                   Host Dashboard
+                </Link>
+              ) : (
+                <Link to="/user-dashboard" className="text-sm font-medium transition-colors hover:text-primary">
+                  My Dashboard
                 </Link>
               )}
               <CartDrawer />
@@ -277,9 +281,13 @@ export const Navbar = () => {
               )}
               {user ? (
                 <>
-                  {isHost && (
+                  {isHost ? (
                     <Link to="/host-dashboard" className="text-lg font-medium">
                       Host Dashboard
+                    </Link>
+                  ) : (
+                    <Link to="/user-dashboard" className="text-lg font-medium">
+                      My Dashboard
                     </Link>
                   )}
                   <Link to="/profile">

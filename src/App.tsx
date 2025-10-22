@@ -18,6 +18,7 @@ import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
 import RegisterPet from "./pages/RegisterPet";
 import HostDashboard from "./pages/HostDashboard";
+import UserDashboard from "./pages/UserDashboard";
 import PetAirbnb from "./pages/PetAirbnb";
 import PetCemeteries from "./pages/PetCemeteries";
 import PetParties from "./pages/PetParties";
@@ -63,6 +64,7 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/register-pet" element={<RegisterPet />} />
           <Route path="/host-dashboard" element={<HostDashboard />} />
+          <Route path="/user-dashboard" element={<UserDashboard />} />
           <Route path="/create-pet-stay" element={<CreatePetStay />} />
           <Route path="/product/:handle" element={<ProductDetail />} />
           <Route path="/about-us" element={<AboutUs />} />
