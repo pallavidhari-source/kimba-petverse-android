@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Layout } from "./components/Layout";
 import Index from "./pages/Index";
 import Explore from "./pages/Explore";
 import Auth from "./pages/Auth";
@@ -43,8 +44,9 @@ const App = () => (
         />
       </div>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Index />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/adopt" element={<Adopt />} />
           <Route path="/buy-pets" element={<BuyPets />} />
@@ -67,7 +69,8 @@ const App = () => (
           <Route path="/contact-us" element={<ContactUs />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
-        </Routes>
+          </Routes>
+        </Layout>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

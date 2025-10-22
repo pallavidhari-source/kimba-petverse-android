@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { Link } from "react-router-dom";
 import { Heart, Shield, Star, Clock, Sparkles, Home, ShoppingBag, Stethoscope, Scissors, Coffee, Wallet } from "lucide-react";
 import heroImage from "@/assets/hero-pets.jpg";
@@ -164,8 +163,6 @@ const Index = () => {
           </Link>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };
