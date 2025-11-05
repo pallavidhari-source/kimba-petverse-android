@@ -14,36 +14,69 @@ const Adopt = () => {
   const adoptionPets = [
     {
       id: 1,
-      name: "Max",
-      breed: "Golden Retriever",
-      age: "2 years",
+      name: "ChatGT Pom",
+      breed: "Pomeranian",
+      age: "Adult",
       gender: "male",
       isNeutered: true,
-      location: "Banjara Hills",
+      location: "Irvine, CA",
       image: adoptMax,
-      description: "Friendly and well-trained"
+      description: "Sweet Pomeranian looking for a loving home"
     },
     {
       id: 2,
-      name: "Luna",
-      breed: "Persian Cat",
-      age: "1 year",
-      gender: "female",
+      name: "Onix",
+      breed: "American Shorthair",
+      age: "Young",
+      gender: "male",
       isSpayed: true,
-      location: "Jubilee Hills",
+      location: "Santa Ana, CA",
       image: adoptLuna,
-      description: "Calm and affectionate"
+      description: "Affectionate young cat, great companion"
     },
     {
       id: 3,
-      name: "Rocky",
-      breed: "Labrador",
-      age: "3 years",
+      name: "Alpine Pup - Montage",
+      breed: "Dachshund Terrier Mix",
+      age: "Puppy",
       gender: "male",
       isNeutered: false,
-      location: "Hitech City",
+      location: "San Diego, CA",
       image: adoptRocky,
-      description: "Energetic and playful"
+      description: "Energetic puppy ready for adventures"
+    },
+    {
+      id: 4,
+      name: "Bella",
+      breed: "Labrador Retriever Mix",
+      age: "2 years",
+      gender: "female",
+      isSpayed: true,
+      location: "Los Angeles, CA",
+      image: adoptMax,
+      description: "Friendly, well-trained, and loves kids"
+    },
+    {
+      id: 5,
+      name: "Whiskers",
+      breed: "Domestic Shorthair",
+      age: "3 years",
+      gender: "female",
+      isSpayed: true,
+      location: "San Francisco, CA",
+      image: adoptLuna,
+      description: "Calm indoor cat, perfect for apartment living"
+    },
+    {
+      id: 6,
+      name: "Max",
+      breed: "German Shepherd Mix",
+      age: "4 years",
+      gender: "male",
+      isNeutered: true,
+      location: "Sacramento, CA",
+      image: adoptRocky,
+      description: "Loyal companion, great with families"
     }
   ];
 
