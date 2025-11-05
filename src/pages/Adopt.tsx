@@ -19,7 +19,7 @@ const Adopt = () => {
       age: "Adult",
       gender: "male",
       isNeutered: true,
-      location: "Irvine, CA",
+      location: "Banjara Hills, Hyderabad",
       image: adoptMax,
       description: "Sweet Pomeranian looking for a loving home"
     },
@@ -30,7 +30,7 @@ const Adopt = () => {
       age: "Young",
       gender: "male",
       isSpayed: true,
-      location: "Santa Ana, CA",
+      location: "Jubilee Hills, Hyderabad",
       image: adoptLuna,
       description: "Affectionate young cat, great companion"
     },
@@ -41,7 +41,7 @@ const Adopt = () => {
       age: "Puppy",
       gender: "male",
       isNeutered: false,
-      location: "San Diego, CA",
+      location: "Gachibowli, Hyderabad",
       image: adoptRocky,
       description: "Energetic puppy ready for adventures"
     },
@@ -52,7 +52,7 @@ const Adopt = () => {
       age: "2 years",
       gender: "female",
       isSpayed: true,
-      location: "Los Angeles, CA",
+      location: "Madhapur, Hyderabad",
       image: adoptMax,
       description: "Friendly, well-trained, and loves kids"
     },
@@ -63,7 +63,7 @@ const Adopt = () => {
       age: "3 years",
       gender: "female",
       isSpayed: true,
-      location: "San Francisco, CA",
+      location: "Hitech City, Hyderabad",
       image: adoptLuna,
       description: "Calm indoor cat, perfect for apartment living"
     },
@@ -74,7 +74,7 @@ const Adopt = () => {
       age: "4 years",
       gender: "male",
       isNeutered: true,
-      location: "Sacramento, CA",
+      location: "Kondapur, Hyderabad",
       image: adoptRocky,
       description: "Loyal companion, great with families"
     }
