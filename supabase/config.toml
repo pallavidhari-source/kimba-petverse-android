@@ -1,1 +1,4 @@
 project_id = "tpzojxxrnvvlrousnkgy"
+
+[functions.fetch-adoption-pets]
+verify_jwt = false
