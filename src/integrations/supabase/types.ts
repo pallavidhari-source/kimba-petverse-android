@@ -181,6 +181,69 @@ export type Database = {
         }
         Relationships: []
       }
+      pet_products: {
+        Row: {
+          category: string
+          color: string
+          created_at: string | null
+          description: string | null
+          features: string[] | null
+          gender: string
+          id: string
+          images: string[]
+          in_stock: boolean | null
+          material: string
+          name: string
+          original_price: number | null
+          price: number
+          rating: number | null
+          reviews_count: number | null
+          sizes: string[]
+          stock_quantity: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          color: string
+          created_at?: string | null
+          description?: string | null
+          features?: string[] | null
+          gender: string
+          id?: string
+          images?: string[]
+          in_stock?: boolean | null
+          material: string
+          name: string
+          original_price?: number | null
+          price: number
+          rating?: number | null
+          reviews_count?: number | null
+          sizes?: string[]
+          stock_quantity?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          color?: string
+          created_at?: string | null
+          description?: string | null
+          features?: string[] | null
+          gender?: string
+          id?: string
+          images?: string[]
+          in_stock?: boolean | null
+          material?: string
+          name?: string
+          original_price?: number | null
+          price?: number
+          rating?: number | null
+          reviews_count?: number | null
+          sizes?: string[]
+          stock_quantity?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       pet_stays: {
         Row: {
           amenities: string[] | null
@@ -397,10 +460,7 @@ export type Database = {
         }
         Returns: boolean
       }
-      is_email_allowed: {
-        Args: { check_email: string }
-        Returns: boolean
-      }
+      is_email_allowed: { Args: { check_email: string }; Returns: boolean }
       update_wallet_balance: {
         Args: {
           _amount: number

@@ -25,6 +25,7 @@ import PetParties from "./pages/PetParties";
 import NotFound from "./pages/NotFound";
 import CreatePetStay from "./pages/CreatePetStay";
 import ProductDetail from "./pages/ProductDetail";
+import EthnicWear from "./pages/EthnicWear";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import kimbaLogo from "./assets/kimba-logo.png";
@@ -52,6 +53,7 @@ const App = () => (
           <Route path="/adopt" element={<Adopt />} />
           <Route path="/buy-pets" element={<BuyPets />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/ethnic-wear" element={<EthnicWear />} />
           <Route path="/vets" element={<Vets />} />
           <Route path="/grooming" element={<Grooming />} />
           <Route path="/cafes" element={<Cafes />} />
@@ -66,6 +68,7 @@ const App = () => (
           <Route path="/host-dashboard" element={<HostDashboard />} />
           <Route path="/user-dashboard" element={<UserDashboard />} />
           <Route path="/create-pet-stay" element={<CreatePetStay />} />
+          <Route path="/ethnic-wear" element={<EthnicWear />} />
           <Route path="/product/:handle" element={<ProductDetail />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { CartItem, createStorefrontCheckout } from '@/lib/shopify';
 
+// Shopify cart store
 interface CartStore {
   items: CartItem[];
   cartId: string | null;
@@ -88,6 +89,78 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'shopify-cart',
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
+
+// Product cart store for ethnic wear and other products
+interface ProductCartItem {
+  id: string;
+  name: string;
+  price: number;
+  size: string;
+  image: string;
+  quantity: number;
+  category: string;
+}
+
+interface ProductCartStore {
+  items: ProductCartItem[];
+  addItem: (item: Omit<ProductCartItem, 'quantity'>) => void;
+  removeItem: (id: string, size: string) => void;
+  updateQuantity: (id: string, size: string, quantity: number) => void;
+  clearCart: () => void;
+  getTotalItems: () => number;
+  getTotalPrice: () => number;
+}
+
+export const useProductCartStore = create<ProductCartStore>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      
+      addItem: (item) => {
+        const items = get().items;
+        const existingItem = items.find(i => i.id === item.id && i.size === item.size);
+        
+        if (existingItem) {
+          set({
+            items: items.map(i =>
+              i.id === item.id && i.size === item.size
+                ? { ...i, quantity: i.quantity + 1 }
+                : i
+            )
+          });
+        } else {
+          set({ items: [...items, { ...item, quantity: 1 }] });
+        }
+      },
+      
+      removeItem: (id, size) => {
+        set({ items: get().items.filter(i => !(i.id === id && i.size === size)) });
+      },
+      
+      updateQuantity: (id, size, quantity) => {
+        if (quantity <= 0) {
+          get().removeItem(id, size);
+          return;
+        }
+        set({
+          items: get().items.map(i =>
+            i.id === id && i.size === size ? { ...i, quantity } : i
+          )
+        });
+      },
+      
+      clearCart: () => set({ items: [] }),
+      
+      getTotalItems: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
+      
+      getTotalPrice: () => get().items.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+    }),
+    {
+      name: 'product-cart-storage',
       storage: createJSONStorage(() => localStorage),
     }
   )
