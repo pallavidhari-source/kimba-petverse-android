@@ -9,21 +9,41 @@ import cafeWoof from "@/assets/cafe-woof.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 const Cafes = () => {
   const navigate = useNavigate();
 
-  const handleReservation = async (cafeName: string) => {
+  // Check for pending reservation after auth
+  useEffect(() => {
+    const checkPendingReservation = async () => {
+      const pendingReservation = sessionStorage.getItem("pendingCafeReservation");
+      if (pendingReservation) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const cafe = JSON.parse(pendingReservation);
+          sessionStorage.removeItem("pendingCafeReservation");
+          toast.success(`Reserving table at ${cafe.name}...`);
+          // TODO: Navigate to actual reservation page when implemented
+        }
+      }
+    };
+    checkPendingReservation();
+  }, [navigate]);
+
+  const handleReservation = async (cafe: any) => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
+      // Store reservation intent and redirect to auth
+      sessionStorage.setItem("pendingCafeReservation", JSON.stringify(cafe));
       toast.error("Please sign in to reserve a table");
       navigate("/auth", { state: { returnTo: "/cafes" } });
       return;
     }
 
     // TODO: Navigate to reservation page with cafe details
-    toast.success(`Reserving table at ${cafeName}...`);
+    toast.success(`Reserving table at ${cafe.name}...`);
   };
 
   const petCafes = [
@@ -117,7 +137,7 @@ const Cafes = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full" onClick={() => handleReservation(cafe.name)}>Reserve Table</Button>
+                  <Button className="w-full" onClick={() => handleReservation(cafe)}>Reserve Table</Button>
                 </CardFooter>
               </Card>
             ))}

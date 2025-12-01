@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,10 +10,28 @@ import { toast } from "sonner";
 const Vets = () => {
   const navigate = useNavigate();
 
+  // Check for pending booking after auth
+  useEffect(() => {
+    const checkPendingBooking = async () => {
+      const pendingBooking = sessionStorage.getItem("pendingVetBooking");
+      if (pendingBooking) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const vet = JSON.parse(pendingBooking);
+          sessionStorage.removeItem("pendingVetBooking");
+          navigate("/book-vet-appointment", { state: { vet } });
+        }
+      }
+    };
+    checkPendingBooking();
+  }, [navigate]);
+
   const handleBookAppointment = async (vet: any) => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
+      // Store booking intent and redirect to auth
+      sessionStorage.setItem("pendingVetBooking", JSON.stringify(vet));
       toast.error("Please sign in to book an appointment");
       navigate("/auth", { state: { returnTo: "/vets" } });
       return;
