@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const vetAppointmentSchema = z.object({
   petParentName: z.string().min(2, "Pet parent name must be at least 2 characters"),
+  phoneNumber: z.string().regex(/^\+91\s?\d{10}$/, "Phone number must be in format +91 followed by 10 digits"),
   petName: z.string().min(2, "Pet name must be at least 2 characters"),
   petGender: z.enum(["male", "female"], {
     required_error: "Please select pet gender",

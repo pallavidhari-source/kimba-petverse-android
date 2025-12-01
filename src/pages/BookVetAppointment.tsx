@@ -38,6 +38,7 @@ const BookVetAppointment = () => {
     resolver: zodResolver(vetAppointmentSchema),
     defaultValues: {
       petParentName: "",
+      phoneNumber: "",
       petName: "",
       petGender: undefined,
       appointmentReason: "",
@@ -147,6 +148,20 @@ const BookVetAppointment = () => {
                         <FormLabel>Pet Parent Name</FormLabel>
                         <FormControl>
                           <Input placeholder="Your full name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="phoneNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="+91 9876543210" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
