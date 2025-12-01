@@ -3,9 +3,23 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Star, Phone, Clock } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Vets = () => {
   const navigate = useNavigate();
+
+  const handleBookAppointment = async (vet: any) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      toast.error("Please sign in to book an appointment");
+      navigate("/auth", { state: { returnTo: "/vets" } });
+      return;
+    }
+
+    navigate("/book-vet-appointment", { state: { vet } });
+  };
 
   const veterinarians = [
     {
@@ -96,7 +110,7 @@ const Vets = () => {
                 <CardFooter>
                   <Button 
                     className="w-full"
-                    onClick={() => navigate("/book-vet-appointment", { state: { vet } })}
+                    onClick={() => handleBookAppointment(vet)}
                   >
                     Book Appointment
                   </Button>

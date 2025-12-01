@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,9 +11,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { vetAppointmentSchema, type VetAppointmentFormData } from "@/lib/validations/vet-appointment";
-import { ArrowLeft, MapPin, Star, Phone, Clock } from "lucide-react";
+import { ArrowLeft, MapPin, Star, Phone, Clock, CheckCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface VetDetails {
   id: number;
@@ -29,11 +31,27 @@ interface VetDetails {
 const BookVetAppointment = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [appointmentData, setAppointmentData] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
 
   // Get vet details from navigation state
   const vetDetails = location.state?.vet as VetDetails | undefined;
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error("Please sign in to book an appointment");
+      navigate("/auth");
+      return;
+    }
+    setUser(session.user);
+  };
 
   const form = useForm<VetAppointmentFormData>({
     resolver: zodResolver(vetAppointmentSchema),
@@ -54,30 +72,43 @@ const BookVetAppointment = () => {
     setIsSubmitting(true);
     
     try {
-      // TODO: Integrate with backend API/Supabase
-      // For now, simulate API call
+      // TODO: Integrate with backend API/Supabase to save to database
+      // For now, simulate API call and store in state
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      console.log("Appointment Data:", {
+      const fullAppointmentData = {
         ...data,
+        fullPhoneNumber: `${data.countryCode} ${data.phoneNumber}`,
         vetId: vetDetails?.id,
         vetName: vetDetails?.name,
+        vetSpecialization: vetDetails?.specialization,
         clinic: vetDetails?.clinic,
-      });
+        clinicLocation: vetDetails?.location,
+        clinicPhone: vetDetails?.phone,
+        status: "pending",
+        bookedAt: new Date().toISOString(),
+        userId: user?.id,
+      };
 
-      toast({
-        title: "Appointment Requested!",
-        description: `Your appointment with ${vetDetails?.name || "the veterinarian"} has been requested. We'll confirm shortly.`,
-      });
+      console.log("Appointment Data:", fullAppointmentData);
 
-      // Redirect to user dashboard or confirmation page
-      navigate("/user-dashboard");
+      setAppointmentData(fullAppointmentData);
+      setShowSuccess(true);
+
+      // Scroll to top to show success message
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Redirect to user dashboard after 3 seconds
+      setTimeout(() => {
+        navigate("/user-dashboard", { 
+          state: { 
+            newAppointment: fullAppointmentData,
+            showAppointments: true 
+          } 
+        });
+      }, 3000);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to book appointment. Please try again.",
-        variant: "destructive",
-      });
+      toast.error("Failed to book appointment. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -96,6 +127,23 @@ const BookVetAppointment = () => {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Veterinarians
         </Button>
+
+        {showSuccess && appointmentData && (
+          <Alert className="mb-6 bg-green-50 border-green-200">
+            <CheckCircle className="h-4 w-4 text-green-600" />
+            <AlertTitle className="text-green-800">Appointment Booked Successfully!</AlertTitle>
+            <AlertDescription className="text-green-700">
+              <div className="mt-2 space-y-1">
+                <p><strong>Pet:</strong> {appointmentData.petName} ({appointmentData.petType})</p>
+                <p><strong>Date:</strong> {appointmentData.preferredDate}</p>
+                <p><strong>Time:</strong> {appointmentData.preferredTime}</p>
+                <p><strong>Vet:</strong> {appointmentData.vetName}</p>
+                <p><strong>Clinic:</strong> {appointmentData.clinic}</p>
+                <p className="mt-3 text-sm">Redirecting to your dashboard...</p>
+              </div>
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Vet Details Card */}
