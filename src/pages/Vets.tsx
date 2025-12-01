@@ -1,9 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Star, Phone, Clock } from "lucide-react";
 
 const Vets = () => {
+  const navigate = useNavigate();
+
   const veterinarians = [
     {
       id: 1,
@@ -91,7 +94,12 @@ const Vets = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full">Book Appointment</Button>
+                  <Button 
+                    className="w-full"
+                    onClick={() => navigate("/book-vet-appointment", { state: { vet } })}
+                  >
+                    Book Appointment
+                  </Button>
                 </CardFooter>
               </Card>
             ))}
