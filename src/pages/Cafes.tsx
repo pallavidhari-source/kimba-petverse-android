@@ -6,8 +6,26 @@ import { MapPin, Star, Coffee, Clock } from "lucide-react";
 import cafePawsome from "@/assets/cafe-pawsome.jpg";
 import cafeFurry from "@/assets/cafe-furry.jpg";
 import cafeWoof from "@/assets/cafe-woof.jpg";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Cafes = () => {
+  const navigate = useNavigate();
+
+  const handleReservation = async (cafeName: string) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      toast.error("Please sign in to reserve a table");
+      navigate("/auth", { state: { returnTo: "/cafes" } });
+      return;
+    }
+
+    // TODO: Navigate to reservation page with cafe details
+    toast.success(`Reserving table at ${cafeName}...`);
+  };
+
   const petCafes = [
     {
       id: 1,
@@ -99,7 +117,7 @@ const Cafes = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full">Reserve Table</Button>
+                  <Button className="w-full" onClick={() => handleReservation(cafe.name)}>Reserve Table</Button>
                 </CardFooter>
               </Card>
             ))}

@@ -3,8 +3,26 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Star, Clock } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Grooming = () => {
+  const navigate = useNavigate();
+
+  const handleBooking = async (serviceName: string) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      toast.error("Please sign in to book grooming service");
+      navigate("/auth", { state: { returnTo: "/grooming" } });
+      return;
+    }
+
+    // TODO: Navigate to booking page with service details
+    toast.success(`Booking ${serviceName}...`);
+  };
+
   const groomingServices = [
     {
       id: 1,
@@ -89,7 +107,7 @@ const Grooming = () => {
                   <p className="font-semibold text-primary">{service.price}</p>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full">Book Service</Button>
+                  <Button className="w-full" onClick={() => handleBooking(service.name)}>Book Service</Button>
                 </CardFooter>
               </Card>
             ))}

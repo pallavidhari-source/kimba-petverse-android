@@ -148,6 +148,21 @@ const PetAirbnb = () => {
 };
 
 const StayCard = ({ stay, setSelectedStay }: any) => {
+  const navigate = useNavigate();
+
+  const handleBooking = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      toast.error("Please sign in to book a pet stay");
+      navigate("/auth", { state: { returnTo: "/pet-airbnb" } });
+      return;
+    }
+
+    // TODO: Navigate to booking page with stay details
+    toast.success("Redirecting to booking page...");
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -186,7 +201,7 @@ const StayCard = ({ stay, setSelectedStay }: any) => {
         </div>
       </CardContent>
       <CardFooter className="flex gap-2">
-        <Button className="flex-1">
+        <Button className="flex-1" onClick={handleBooking}>
           <Calendar className="h-4 w-4 mr-2" />
           Book Stay
         </Button>
@@ -292,7 +307,7 @@ const StayCard = ({ stay, setSelectedStay }: any) => {
                 </div>
               )}
 
-              <Button className="w-full" size="lg">
+              <Button className="w-full" size="lg" onClick={handleBooking}>
                 <Calendar className="h-4 w-4 mr-2" />
                 Book This Stay
               </Button>
