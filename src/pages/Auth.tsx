@@ -96,9 +96,14 @@ const Auth = () => {
 
       toast.success("Account created successfully!");
       
-      // Redirect hosts to registration page, others to explore
+      // Redirect hosts to registration page with pre-filled data, others to explore
       if (isHostSignup) {
-        navigate("/become-host");
+        navigate("/become-host", { 
+          state: { 
+            fullName, 
+            phone 
+          } 
+        });
       } else {
         navigate("/explore");
       }

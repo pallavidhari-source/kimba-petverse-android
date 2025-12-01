@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,10 +10,16 @@ import { toast } from "sonner";
 
 const BecomeHost = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [kycDocument, setKycDocument] = useState<File | null>(null);
   const [selfie, setSelfie] = useState<File | null>(null);
+  
+  // Get pre-filled data from signup
+  const signupData = location.state as { fullName?: string; phone?: string } | null;
+  const [fullName, setFullName] = useState(signupData?.fullName || "");
+  const [phone, setPhone] = useState(signupData?.phone || "");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -94,9 +100,9 @@ const BecomeHost = () => {
       <div className="container mx-auto px-4 py-16">
         <Card className="mx-auto max-w-2xl shadow-medium">
           <CardHeader>
-            <CardTitle className="text-2xl">Become a Host</CardTitle>
+            <CardTitle className="text-2xl">KYC DETAILS - NEW HOST</CardTitle>
             <CardDescription>
-              Submit your KYC details to get verified as a pet host
+              Complete your KYC verification to become a verified pet host
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -111,6 +117,8 @@ const BecomeHost = () => {
                     name="fullName"
                     required
                     placeholder="Your full name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
                   />
                 </div>
 
@@ -122,6 +130,8 @@ const BecomeHost = () => {
                     type="tel"
                     required
                     placeholder="+91 98765 43210"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
 
