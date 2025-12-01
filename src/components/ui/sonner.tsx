@@ -68,9 +68,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
           padding: 20px !important;
         }
         
-        [data-button] {
+        [data-sonner-toast] button[data-button],
+        [data-sonner-toast] [data-action="true"] button {
           margin-left: auto !important;
-          padding: 10px 32px !important;
+          padding: 8px 24px !important;
           background: white !important;
           color: hsl(var(--primary)) !important;
           border-radius: 6px !important;
@@ -78,9 +79,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
           cursor: pointer !important;
           border: none !important;
           font-size: 14px !important;
+          display: inline-flex !important;
+          align-items: center !important;
         }
         
-        [data-button]:hover {
+        [data-sonner-toast] button[data-button]:hover,
+        [data-sonner-toast] [data-action="true"] button:hover {
           opacity: 0.9 !important;
         }
         
@@ -101,7 +105,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
             toast:
               "group toast group-[.toaster]:bg-primary group-[.toaster]:text-primary-foreground group-[.toaster]:border-primary group-[.toaster]:shadow-2xl",
             description: "group-[.toast]:text-primary-foreground/90 group-[.toast]:text-base",
-            actionButton: "",
+            actionButton: "!bg-white !text-primary !ml-auto !px-6 !py-2 !rounded-md !font-semibold !border-none hover:!opacity-90",
             cancelButton: "",
           },
         }}
