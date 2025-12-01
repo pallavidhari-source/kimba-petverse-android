@@ -11,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { PawPrint, Upload, Loader2 } from "lucide-react";
+import { registerPetSchema } from "@/lib/validations/host";
 
 const RegisterPet = () => {
   const navigate = useNavigate();
@@ -98,15 +99,9 @@ const RegisterPet = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!petData.name || !petData.type || !petData.breed || !petData.age || !petData.price_per_hour || !petData.location) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
 
     try {
       setLoading(true);
-      setUploading(true);
 
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -115,6 +110,19 @@ const RegisterPet = () => {
         return;
       }
 
+      // Validate form data
+      const validatedData = registerPetSchema.parse({
+        name: petData.name,
+        type: petData.type,
+        breed: petData.breed,
+        age: parseInt(petData.age),
+        temperament: petData.temperament || undefined,
+        description: petData.description || undefined,
+        price_per_hour: parseFloat(petData.price_per_hour),
+        location: petData.location,
+      });
+
+      setUploading(true);
       // Upload image
       const imageUrl = await uploadImage();
       setUploading(false);
@@ -124,14 +132,14 @@ const RegisterPet = () => {
         .from("pets")
         .insert({
           host_id: session.user.id,
-          name: petData.name,
-          type: petData.type,
-          breed: petData.breed,
-          age: parseInt(petData.age),
-          temperament: petData.temperament,
-          description: petData.description,
-          price_per_hour: parseFloat(petData.price_per_hour),
-          location: petData.location,
+          name: validatedData.name,
+          type: validatedData.type,
+          breed: validatedData.breed,
+          age: validatedData.age,
+          temperament: validatedData.temperament || "",
+          description: validatedData.description || "",
+          price_per_hour: validatedData.price_per_hour,
+          location: validatedData.location,
           is_vaccinated: petData.is_vaccinated,
           is_trained: petData.is_trained,
           is_kid_friendly: petData.is_kid_friendly,
@@ -144,8 +152,11 @@ const RegisterPet = () => {
       toast.success("Pet registered successfully!");
       navigate("/host-dashboard", { replace: true });
     } catch (error: any) {
-      console.error("Error registering pet:", error);
-      toast.error(error.message || "Failed to register pet");
+      if (error.name === "ZodError") {
+        toast.error(error.errors[0]?.message || "Invalid form data");
+      } else {
+        toast.error(error.message || "Failed to register pet");
+      }
     } finally {
       setLoading(false);
       setUploading(false);
