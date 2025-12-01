@@ -66,31 +66,37 @@ const Toaster = ({ ...props }: ToasterProps) => {
           min-width: 400px !important;
           max-width: 500px !important;
           padding: 20px !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 16px !important;
         }
         
-        [data-sonner-toast] button[data-button],
-        [data-sonner-toast] [data-action="true"] button {
+        [data-sonner-toast] button {
           margin-left: auto !important;
-          padding: 8px 24px !important;
+          padding: 10px 28px !important;
           background: white !important;
-          color: hsl(var(--primary)) !important;
-          border-radius: 6px !important;
-          font-weight: 600 !important;
+          color: #ea580c !important;
+          border-radius: 8px !important;
+          font-weight: 700 !important;
           cursor: pointer !important;
-          border: none !important;
-          font-size: 14px !important;
+          border: 2px solid white !important;
+          font-size: 15px !important;
           display: inline-flex !important;
           align-items: center !important;
+          flex-shrink: 0 !important;
+          transition: all 0.2s !important;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
         }
         
-        [data-sonner-toast] button[data-button]:hover,
-        [data-sonner-toast] [data-action="true"] button:hover {
-          opacity: 0.9 !important;
+        [data-sonner-toast] button:hover {
+          background: #f5f5f5 !important;
+          transform: scale(1.05) !important;
         }
         
         [data-content] {
           font-size: 15px !important;
           line-height: 1.5 !important;
+          flex: 1 !important;
         }
       `}</style>
       <div className="sonner-backdrop" id="toast-backdrop" style={{ display: 'none' }} />
@@ -105,7 +111,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
             toast:
               "group toast group-[.toaster]:bg-primary group-[.toaster]:text-primary-foreground group-[.toaster]:border-primary group-[.toaster]:shadow-2xl",
             description: "group-[.toast]:text-primary-foreground/90 group-[.toast]:text-base",
-            actionButton: "!bg-white !text-primary !ml-auto !px-6 !py-2 !rounded-md !font-semibold !border-none hover:!opacity-90",
+            actionButton: "",
             cancelButton: "",
           },
         }}
