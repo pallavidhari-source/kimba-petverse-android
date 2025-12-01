@@ -111,16 +111,22 @@ const Toaster = ({ ...props }: ToasterProps) => {
   );
 };
 
-// Create custom toast wrapper that adds OK button
+// Create custom toast wrapper that adds OK button and dismisses previous toasts
 const createToastWithOK = (toastFn: any) => {
   return (message: string, options?: any) => {
-    return toastFn(message, {
-      ...options,
-      action: {
-        label: 'OK',
-        onClick: () => {},
-      },
-    });
+    // Dismiss all existing toasts before showing new one
+    sonnerToast.dismiss();
+    
+    // Small delay to ensure previous toasts are cleared
+    setTimeout(() => {
+      return toastFn(message, {
+        ...options,
+        action: {
+          label: 'OK',
+          onClick: () => {},
+        },
+      });
+    }, 100);
   };
 };
 
