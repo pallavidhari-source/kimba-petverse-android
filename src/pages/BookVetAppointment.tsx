@@ -39,6 +39,7 @@ const BookVetAppointment = () => {
     resolver: zodResolver(vetAppointmentSchema),
     defaultValues: {
       petParentName: "",
+      countryCode: "+91",
       phoneNumber: "",
       petName: "",
       petType: "",
@@ -156,19 +157,48 @@ const BookVetAppointment = () => {
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="phoneNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone Number</FormLabel>
-                        <FormControl>
-                          <Input placeholder="+91 9876543210" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="space-y-2">
+                    <FormLabel>Phone Number</FormLabel>
+                    <div className="flex gap-2">
+                      <FormField
+                        control={form.control}
+                        name="countryCode"
+                        render={({ field }) => (
+                          <FormItem className="w-32">
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger className="bg-background">
+                                  <SelectValue placeholder="Code" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent className="bg-background z-50">
+                                <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                                <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                                <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                                <SelectItem value="+61">🇦🇺 +61</SelectItem>
+                                <SelectItem value="+971">🇦🇪 +971</SelectItem>
+                                <SelectItem value="+65">🇸🇬 +65</SelectItem>
+                                <SelectItem value="+60">🇲🇾 +60</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="phoneNumber"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Input placeholder="9876543210" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
 
                   <FormField
                     control={form.control}
