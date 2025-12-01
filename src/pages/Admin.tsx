@@ -21,6 +21,7 @@ interface HostApplication {
   kyc_document_url: string;
   selfie_url: string;
   admin_notes: string | null;
+  user_email: string;
 }
 
 interface Booking {
@@ -117,11 +118,9 @@ const Admin = () => {
   };
 
   const loadData = async () => {
-    // Load host applications
+    // Load host applications with user emails
     const { data: apps } = await supabase
-      .from("host_applications")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .rpc("get_host_applications_with_email");
 
     if (apps) setHostApplications(apps);
 
@@ -487,6 +486,7 @@ const Admin = () => {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid gap-2 text-sm">
+                      <p><strong>Email:</strong> {app.user_email}</p>
                       <p><strong>Phone:</strong> {app.phone}</p>
                     </div>
                     

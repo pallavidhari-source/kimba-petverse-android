@@ -453,6 +453,29 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_host_applications_with_email: {
+        Args: never
+        Returns: {
+          admin_notes: string
+          available_dates_slots: Json
+          available_time_slots: string[]
+          created_at: string
+          full_name: string
+          id: string
+          kyc_document_url: string
+          pet_gender: string
+          pet_images_urls: string[]
+          pet_name: string
+          pet_type: string
+          phone: string
+          selfie_url: string
+          status: Database["public"]["Enums"]["host_status"]
+          updated_at: string
+          user_email: string
+          user_id: string
+          vaccination_certificate_url: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
