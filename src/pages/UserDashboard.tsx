@@ -1,24 +1,33 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Clock, MapPin, DollarSign, User, PawPrint } from "lucide-react";
+import { Calendar, Clock, MapPin, DollarSign, User, PawPrint, Phone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 
 const UserDashboard = () => {
   const [bookings, setBookings] = useState<any[]>([]);
+  const [vetAppointments, setVetAppointments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     checkAuth();
   }, []);
+
+  useEffect(() => {
+    // Check if there's a new appointment from the booking page
+    if (location.state?.newAppointment) {
+      setVetAppointments(prev => [location.state.newAppointment, ...prev]);
+    }
+  }, [location.state]);
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -106,17 +115,87 @@ const UserDashboard = () => {
         <div className="mb-8">
           <h1 className="mb-2 text-3xl font-bold md:text-4xl">My Dashboard</h1>
           <p className="text-muted-foreground">
-            Manage your pet experience bookings
+            Manage your pet experience bookings and vet appointments
           </p>
         </div>
 
-        <Tabs defaultValue="all" className="space-y-6">
-          <TabsList className="grid w-full max-w-md grid-cols-4">
-            <TabsTrigger value="all">All</TabsTrigger>
+        <Tabs defaultValue={location.state?.showAppointments ? "vet-appointments" : "all"} className="space-y-6">
+          <TabsList className="grid w-full max-w-2xl grid-cols-5">
+            <TabsTrigger value="vet-appointments">Vet Appointments</TabsTrigger>
+            <TabsTrigger value="all">All Bookings</TabsTrigger>
             <TabsTrigger value="pending">Pending</TabsTrigger>
             <TabsTrigger value="confirmed">Confirmed</TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="vet-appointments" className="space-y-4">
+            {vetAppointments.length > 0 ? (
+              <div className="grid gap-4 md:grid-cols-2">
+                {vetAppointments.map((appointment, index) => (
+                  <Card key={index}>
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <CardTitle className="text-xl">
+                            {appointment.vetName}
+                          </CardTitle>
+                          <CardDescription>
+                            {appointment.vetSpecialization} • {appointment.clinic}
+                          </CardDescription>
+                        </div>
+                        <Badge variant="secondary">
+                          {appointment.status}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="border-b pb-3">
+                        <p className="text-xs text-muted-foreground mb-1">Pet Details</p>
+                        <div className="flex items-center gap-2 text-sm">
+                          <PawPrint className="h-4 w-4 text-muted-foreground" />
+                          <span>{appointment.petName} ({appointment.petType}) - {appointment.petGender}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <User className="h-4 w-4 text-muted-foreground" />
+                        <span>{appointment.petParentName}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Phone className="h-4 w-4 text-muted-foreground" />
+                        <span>{appointment.fullPhoneNumber}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <span>{appointment.preferredDate}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <span>{appointment.preferredTime}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                        <span>{appointment.clinicLocation}</span>
+                      </div>
+                      <div className="pt-2 border-t">
+                        <p className="text-xs text-muted-foreground mb-1">Reason for Visit</p>
+                        <p className="text-sm">{appointment.appointmentReason}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="py-16 text-center">
+                <PawPrint className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <p className="text-lg text-muted-foreground mb-2">
+                  No vet appointments found
+                </p>
+                <Button onClick={() => navigate("/vets")}>
+                  Book Vet Appointment
+                </Button>
+              </div>
+            )}
+          </TabsContent>
 
           {["all", "pending", "confirmed", "completed"].map((status) => (
             <TabsContent key={status} value={status} className="space-y-4">
