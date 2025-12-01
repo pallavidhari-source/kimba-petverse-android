@@ -11,6 +11,7 @@ import Adopt from "./pages/Adopt";
 import BuyPets from "./pages/BuyPets";
 import Shop from "./pages/Shop";
 import Vets from "./pages/Vets";
+import BookVetAppointment from "./pages/BookVetAppointment";
 import Grooming from "./pages/Grooming";
 import Cafes from "./pages/Cafes";
 import BecomeHost from "./pages/BecomeHost";
@@ -55,6 +56,7 @@ const App = () => (
           <Route path="/shop" element={<Shop />} />
           <Route path="/ethnic-wear" element={<EthnicWear />} />
           <Route path="/vets" element={<Vets />} />
+          <Route path="/book-vet-appointment" element={<BookVetAppointment />} />
           <Route path="/grooming" element={<Grooming />} />
           <Route path="/cafes" element={<Cafes />} />
           <Route path="/pet-airbnb" element={<PetAirbnb />} />
