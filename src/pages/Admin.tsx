@@ -311,44 +311,6 @@ const Admin = () => {
             </form>
           </CardContent>
         </Card>
-
-        <Dialog open={showForgotPassword} onOpenChange={setShowForgotPassword}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Reset Admin Password</DialogTitle>
-              <DialogDescription>
-                Enter the admin email to receive a password reset link
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="reset-email">Admin Email</Label>
-                <Input
-                  id="reset-email"
-                  type="email"
-                  placeholder="pallavidhari@gmail.com"
-                  value={resetEmail}
-                  onChange={(e) => setResetEmail(e.target.value)}
-                />
-              </div>
-              <div className="flex gap-2">
-                <Button onClick={handleAdminForgotPassword} disabled={loading} className="flex-1">
-                  {loading ? "Sending..." : "Send Reset Link"}
-                </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    setShowForgotPassword(false);
-                    setResetEmail("");
-                  }}
-                  disabled={loading}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
     );
   }
@@ -397,6 +359,44 @@ const Admin = () => {
             </form>
           </CardContent>
         </Card>
+
+        <Dialog open={showForgotPassword} onOpenChange={setShowForgotPassword}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Reset Admin Password</DialogTitle>
+              <DialogDescription>
+                Enter the admin email to receive a password reset link
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="reset-email">Admin Email</Label>
+                <Input
+                  id="reset-email"
+                  type="email"
+                  placeholder="pallavidhari@gmail.com"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button onClick={handleAdminForgotPassword} disabled={loading} className="flex-1">
+                  {loading ? "Sending..." : "Send Reset Link"}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setShowForgotPassword(false);
+                    setResetEmail("");
+                  }}
+                  disabled={loading}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
