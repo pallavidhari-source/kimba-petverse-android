@@ -213,29 +213,13 @@ const Admin = () => {
 
     setLoading(true);
     try {
-      // Generate password reset link using Supabase
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
         redirectTo: `${window.location.origin}/admin?reset=true`
       });
 
-      if (resetError) throw resetError;
-
-      // Send custom email via edge function
-      const resetLink = `${window.location.origin}/admin?reset=true`;
-      const { error: emailError } = await supabase.functions.invoke('send-password-reset', {
-        body: { 
-          email: resetEmail,
-          resetLink 
-        }
-      });
-
-      if (emailError) {
-        console.error("Email sending error:", emailError);
-        toast.error("Failed to send email. Please check your email configuration.");
-        return;
-      }
+      if (error) throw error;
       
-      toast.success("Password reset email sent successfully! Check your inbox.");
+      toast.success("Password reset link sent! Check your email inbox (and spam folder).");
       setShowForgotPassword(false);
       setResetEmail("");
     } catch (error: any) {
