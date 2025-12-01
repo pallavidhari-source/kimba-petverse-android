@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { becomeHostSchema } from "@/lib/validations/host";
 
 const BecomeHost = () => {
   const navigate = useNavigate();
@@ -49,12 +50,19 @@ const BecomeHost = () => {
 
     try {
       const formData = new FormData(e.currentTarget);
-      const fullName = formData.get("fullName") as string;
-      const phone = formData.get("phone") as string;
-      const address = formData.get("address") as string;
+      const rawData = {
+        fullName: formData.get("fullName") as string,
+        phone: formData.get("phone") as string,
+        address: formData.get("address") as string,
+      };
+
+      // Validate form data
+      const validatedData = becomeHostSchema.parse(rawData);
+      const { fullName, phone, address } = validatedData;
 
       if (!kycDocument || !selfie) {
         toast.error("Please upload all required documents");
+        setLoading(false);
         return;
       }
 
@@ -86,7 +94,11 @@ const BecomeHost = () => {
       
       navigate("/host-dashboard");
     } catch (error: any) {
-      toast.error(error.message || "Failed to submit application");
+      if (error.name === "ZodError") {
+        toast.error(error.errors[0]?.message || "Invalid form data");
+      } else {
+        toast.error(error.message || "Failed to submit application");
+      }
     } finally {
       setLoading(false);
     }

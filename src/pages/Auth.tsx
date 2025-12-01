@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { signUpSchema, signInSchema, resetPasswordSchema } from "@/lib/validations/auth";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -28,45 +29,30 @@ const Auth = () => {
     }
   }, [searchParams]);
 
-  // Allowed emails for development
-  const allowedEmails = [
-    'pallavidhari@gmail.com',
-    'shivahosur@gmail.com',
-    'anvikahosur@gmail.com',
-    'pallavihosur09@gmail.com',
-    'hosurpallavi@gmail.com'
-  ];
-
-  const isEmailAllowed = (email: string) => {
-    return allowedEmails.includes(email.toLowerCase().trim());
-  };
-
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const fullName = formData.get("fullName") as string;
-    const phone = formData.get("phone") as string;
-
-    // Check if this is an admin email - admins cannot sign up through regular auth
-    if (email.toLowerCase().trim() === 'pallavidhari@gmail.com') {
-      toast.error("Admin accounts must be created through /admin");
-      setLoading(false);
-      navigate("/admin");
-      return;
-    }
-
-    // Check if email is allowed
-    if (!isEmailAllowed(email)) {
-      toast.error("This email is not authorized to access this application during development.");
-      setLoading(false);
-      return;
-    }
-
     try {
+      const formData = new FormData(e.currentTarget);
+      const rawData = {
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+        fullName: formData.get("fullName") as string,
+        phone: formData.get("phone") as string,
+      };
+
+      // Validate form data
+      const validatedData = signUpSchema.parse(rawData);
+      const { email, password, fullName, phone } = validatedData;
+
+      // Check if this is an admin email - admins cannot sign up through regular auth
+      if (email === 'pallavidhari@gmail.com') {
+        toast.error("Admin accounts must be created through /admin");
+        setLoading(false);
+        navigate("/admin");
+        return;
+      }
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -108,7 +94,11 @@ const Auth = () => {
         navigate("/explore");
       }
     } catch (error: any) {
-      toast.error(error.message || "Failed to sign up");
+      if (error.name === "ZodError") {
+        toast.error(error.errors[0]?.message || "Invalid form data");
+      } else {
+        toast.error(error.message || "Failed to sign up");
+      }
     } finally {
       setLoading(false);
     }
@@ -118,26 +108,24 @@ const Auth = () => {
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    // Check if this is an admin email - admins must use /admin
-    if (email.toLowerCase().trim() === 'pallavidhari@gmail.com') {
-      toast.error("Admin accounts must sign in through /admin");
-      setLoading(false);
-      navigate("/admin");
-      return;
-    }
-
-    // Check if email is allowed
-    if (!isEmailAllowed(email)) {
-      toast.error("This email is not authorized to access this application during development.");
-      setLoading(false);
-      return;
-    }
-
     try {
+      const formData = new FormData(e.currentTarget);
+      const rawData = {
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+      };
+
+      // Validate form data
+      const validatedData = signInSchema.parse(rawData);
+      const { email, password } = validatedData;
+
+      // Check if this is an admin email - admins must use /admin
+      if (email === 'pallavidhari@gmail.com') {
+        toast.error("Admin accounts must sign in through /admin");
+        setLoading(false);
+        navigate("/admin");
+        return;
+      }
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -178,26 +166,23 @@ const Auth = () => {
       toast.success("Welcome back!");
       navigate("/explore");
     } catch (error: any) {
-      toast.error(error.message || "Failed to sign in");
+      if (error.name === "ZodError") {
+        toast.error(error.errors[0]?.message || "Invalid form data");
+      } else {
+        toast.error(error.message || "Failed to sign in");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const handleForgotPassword = async () => {
-    if (!resetEmail) {
-      toast.error("Please enter your email");
-      return;
-    }
-
-    if (!isEmailAllowed(resetEmail)) {
-      toast.error("This email is not authorized to access this application during development.");
-      return;
-    }
-
-    setLoading(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+      // Validate email
+      const validatedData = resetPasswordSchema.parse({ email: resetEmail });
+      
+      setLoading(true);
+      const { error } = await supabase.auth.resetPasswordForEmail(validatedData.email, {
         redirectTo: `${window.location.origin}/auth?reset=true`
       });
 
@@ -207,7 +192,11 @@ const Auth = () => {
       setShowForgotPassword(false);
       setResetEmail("");
     } catch (error: any) {
-      toast.error(error.message || "Failed to send reset email");
+      if (error.name === "ZodError") {
+        toast.error(error.errors[0]?.message || "Invalid email");
+      } else {
+        toast.error(error.message || "Failed to send reset email");
+      }
     } finally {
       setLoading(false);
     }

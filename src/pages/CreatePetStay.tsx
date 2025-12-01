@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
+import { createPetStaySchema } from "@/lib/validations/host";
 
 const CreatePetStay = () => {
   const navigate = useNavigate();
@@ -42,30 +43,44 @@ const CreatePetStay = () => {
         return;
       }
 
-      const featuresArray = formData.features
-        .split(',')
-        .map(f => f.trim())
-        .filter(f => f.length > 0);
+      // Validate form data
+      const validatedData = createPetStaySchema.parse({
+        name: formData.name,
+        type: formData.type,
+        location: formData.location,
+        description: formData.description || undefined,
+        price_per_night: parseFloat(formData.price_per_night),
+        max_capacity: formData.max_capacity || undefined,
+        pet_types: formData.pet_types || undefined,
+        check_in_time: formData.check_in_time || undefined,
+        check_out_time: formData.check_out_time || undefined,
+        image_url: formData.image_url || "",
+        features: formData.features || undefined,
+        amenities: formData.amenities || undefined,
+      });
 
-      const amenitiesArray = formData.amenities
-        .split(',')
-        .map(a => a.trim())
-        .filter(a => a.length > 0);
+      const featuresArray = validatedData.features
+        ? validatedData.features.split(',').map(f => f.trim()).filter(f => f.length > 0)
+        : [];
+
+      const amenitiesArray = validatedData.amenities
+        ? validatedData.amenities.split(',').map(a => a.trim()).filter(a => a.length > 0)
+        : [];
 
       const { error } = await supabase
         .from('pet_stays')
         .insert({
           host_id: user.id,
-          name: formData.name,
-          type: formData.type,
-          location: formData.location,
-          description: formData.description,
-          price_per_night: parseFloat(formData.price_per_night),
-          max_capacity: formData.max_capacity,
-          pet_types: formData.pet_types,
-          check_in_time: formData.check_in_time,
-          check_out_time: formData.check_out_time,
-          image_url: formData.image_url || null,
+          name: validatedData.name,
+          type: validatedData.type,
+          location: validatedData.location,
+          description: validatedData.description || null,
+          price_per_night: validatedData.price_per_night,
+          max_capacity: validatedData.max_capacity || null,
+          pet_types: validatedData.pet_types || null,
+          check_in_time: validatedData.check_in_time || null,
+          check_out_time: validatedData.check_out_time || null,
+          image_url: validatedData.image_url || null,
           features: featuresArray,
           amenities: amenitiesArray
         });
@@ -75,8 +90,11 @@ const CreatePetStay = () => {
       toast.success("Pet stay created successfully!");
       navigate("/pet-airbnb");
     } catch (error: any) {
-      console.error('Error creating pet stay:', error);
-      toast.error(error.message || "Failed to create pet stay");
+      if (error.name === "ZodError") {
+        toast.error(error.errors[0]?.message || "Invalid form data");
+      } else {
+        toast.error(error.message || "Failed to create pet stay");
+      }
     } finally {
       setLoading(false);
     }
