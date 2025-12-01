@@ -2,8 +2,26 @@ import { Navbar } from "@/components/Navbar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Users, Cake, Music, Utensils } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const PetParties = () => {
+  const navigate = useNavigate();
+
+  const handleBooking = async (venueName: string) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      toast.error("Please sign in to book a party venue");
+      navigate("/auth", { state: { returnTo: "/pet-parties" } });
+      return;
+    }
+
+    // TODO: Navigate to booking page with venue details
+    toast.success(`Booking ${venueName}...`);
+  };
+
   const venues = [
     {
       id: 1,
@@ -147,7 +165,7 @@ const PetParties = () => {
                     </div>
                   </div>
 
-                  <Button className="w-full">
+                  <Button className="w-full" onClick={() => handleBooking(venue.name)}>
                     <Phone className="w-4 h-4 mr-2" />
                     Book Now
                   </Button>

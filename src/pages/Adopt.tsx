@@ -5,16 +5,17 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Heart, MapPin, Info, ExternalLink, RefreshCw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import adoptMax from "@/assets/adopt-max.jpg";
 import adoptLuna from "@/assets/adopt-luna.jpg";
 import adoptRocky from "@/assets/adopt-rocky.jpg";
 
 const Adopt = () => {
+  const navigate = useNavigate();
   const [selectedPet, setSelectedPet] = useState<any>(null);
   const [adoptionPets, setAdoptionPets] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
   
   const defaultImages = [adoptMax, adoptLuna, adoptRocky];
 
@@ -32,18 +33,11 @@ const Adopt = () => {
           image: defaultImages[index % defaultImages.length]
         }));
         setAdoptionPets(petsWithImages);
-        toast({
-          title: "Success",
-          description: `Loaded ${data.pets.length} pets from search results`,
-        });
+        toast.success(`Loaded ${data.pets.length} pets from search results`);
       }
     } catch (error) {
       console.error('Error fetching adoption pets:', error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch adoption data. Showing sample data.",
-        variant: "destructive",
-      });
+      toast.error("Failed to fetch adoption data. Showing sample data.");
       // Fallback to sample data
       setAdoptionPets([
         {
@@ -83,6 +77,19 @@ const Adopt = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleAdoption = async (petName: string) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      toast.error("Please sign in to adopt a pet");
+      navigate("/auth", { state: { returnTo: "/adopt" } });
+      return;
+    }
+
+    // TODO: Navigate to adoption application page
+    toast.success(`Starting adoption process for ${petName}...`);
   };
 
   useEffect(() => {
@@ -152,7 +159,7 @@ const Adopt = () => {
                       View Source
                     </Button>
                   )}
-                  <Button className={pet.link ? "" : "flex-1"}>
+                  <Button className={pet.link ? "" : "flex-1"} onClick={() => handleAdoption(pet.name)}>
                     <Heart className="h-4 w-4 mr-2" />
                     Adopt
                   </Button>
