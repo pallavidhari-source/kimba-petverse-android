@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { vetAppointmentSchema, type VetAppointmentFormData } from "@/lib/validations/vet-appointment";
@@ -40,6 +41,7 @@ const BookVetAppointment = () => {
       petParentName: "",
       phoneNumber: "",
       petName: "",
+      petType: "",
       petGender: undefined,
       appointmentReason: "",
       preferredDate: "",
@@ -177,6 +179,35 @@ const BookVetAppointment = () => {
                         <FormControl>
                           <Input placeholder="Your pet's name" {...field} />
                         </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="petType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Pet Type</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="bg-background">
+                              <SelectValue placeholder="Select pet type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-background z-50">
+                            <SelectItem value="dog">Dog</SelectItem>
+                            <SelectItem value="cat">Cat</SelectItem>
+                            <SelectItem value="rabbit">Rabbit</SelectItem>
+                            <SelectItem value="turtle">Turtle</SelectItem>
+                            <SelectItem value="bird">Bird</SelectItem>
+                            <SelectItem value="hamster">Hamster</SelectItem>
+                            <SelectItem value="guinea-pig">Guinea Pig</SelectItem>
+                            <SelectItem value="fish">Fish</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
