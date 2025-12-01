@@ -1,9 +1,10 @@
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster as Sonner, toast } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Layout } from "./components/Layout";
+import { useEffect } from "react";
 import Index from "./pages/Index";
 import Explore from "./pages/Explore";
 import Auth from "./pages/Auth";
@@ -33,6 +34,24 @@ import kimbaLogo from "./assets/kimba-logo.png";
 
 const queryClient = new QueryClient();
 
+// Component to handle route changes and dismiss toasts
+const RouteChangeHandler = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Dismiss all toasts when route changes
+    toast.dismiss();
+    
+    // Hide backdrop
+    const backdrop = document.getElementById('toast-backdrop');
+    if (backdrop) {
+      backdrop.style.display = 'none';
+    }
+  }, [location.pathname]);
+
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -47,6 +66,7 @@ const App = () => (
         />
       </div>
       <BrowserRouter>
+        <RouteChangeHandler />
         <Layout>
           <Routes>
             <Route path="/" element={<Index />} />
