@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,9 @@ import { signUpSchema, signInSchema, resetPasswordSchema } from "@/lib/validatio
 
 const Auth = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
+  const returnTo = location.state?.returnTo;
   const [loading, setLoading] = useState(false);
   const [isHostSignup, setIsHostSignup] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -82,8 +84,10 @@ const Auth = () => {
 
       toast.success("Account created successfully!");
       
-      // Redirect hosts to registration page with pre-filled data, others to explore
-      if (isHostSignup) {
+      // Redirect based on priority: returnTo > host signup > default explore
+      if (returnTo) {
+        navigate(returnTo);
+      } else if (isHostSignup) {
         navigate("/become-host", { 
           state: { 
             fullName, 
@@ -152,19 +156,19 @@ const Auth = () => {
           // Redirect to registration if no application exists
           if (!application) {
             toast.success("Welcome! Please complete your host registration.");
-            navigate("/become-host");
+            navigate(returnTo || "/become-host");
             return;
           }
 
-          // Redirect host to host dashboard
+          // Redirect host to their intended destination or host dashboard
           toast.success("Welcome back, Host!");
-          navigate("/host-dashboard");
+          navigate(returnTo || "/host-dashboard");
           return;
         }
       }
 
       toast.success("Welcome back!");
-      navigate("/explore");
+      navigate(returnTo || "/explore");
     } catch (error: any) {
       if (error.name === "ZodError") {
         toast.error(error.errors[0]?.message || "Invalid form data");

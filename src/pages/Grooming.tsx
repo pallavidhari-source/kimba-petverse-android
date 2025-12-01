@@ -6,21 +6,41 @@ import { MapPin, Star, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 const Grooming = () => {
   const navigate = useNavigate();
 
-  const handleBooking = async (serviceName: string) => {
+  // Check for pending booking after auth
+  useEffect(() => {
+    const checkPendingBooking = async () => {
+      const pendingBooking = sessionStorage.getItem("pendingGroomingBooking");
+      if (pendingBooking) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const service = JSON.parse(pendingBooking);
+          sessionStorage.removeItem("pendingGroomingBooking");
+          toast.success(`Booking ${service.name}...`);
+          // TODO: Navigate to actual booking page when implemented
+        }
+      }
+    };
+    checkPendingBooking();
+  }, [navigate]);
+
+  const handleBooking = async (service: any) => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
+      // Store booking intent and redirect to auth
+      sessionStorage.setItem("pendingGroomingBooking", JSON.stringify(service));
       toast.error("Please sign in to book grooming service");
       navigate("/auth", { state: { returnTo: "/grooming" } });
       return;
     }
 
     // TODO: Navigate to booking page with service details
-    toast.success(`Booking ${serviceName}...`);
+    toast.success(`Booking ${service.name}...`);
   };
 
   const groomingServices = [
@@ -107,7 +127,7 @@ const Grooming = () => {
                   <p className="font-semibold text-primary">{service.price}</p>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full" onClick={() => handleBooking(service.name)}>Book Service</Button>
+                  <Button className="w-full" onClick={() => handleBooking(service)}>Book Service</Button>
                 </CardFooter>
               </Card>
             ))}

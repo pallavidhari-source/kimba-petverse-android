@@ -20,7 +20,21 @@ const PetAirbnb = () => {
   useEffect(() => {
     checkUser();
     fetchPetStays();
+    checkPendingBooking();
   }, []);
+
+  // Check for pending booking after auth
+  const checkPendingBooking = async () => {
+    const pendingBooking = sessionStorage.getItem("pendingStayBooking");
+    if (pendingBooking) {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        sessionStorage.removeItem("pendingStayBooking");
+        toast.success("Redirecting to booking page...");
+        // TODO: Navigate to actual booking page when implemented
+      }
+    }
+  };
 
   const checkUser = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -154,6 +168,8 @@ const StayCard = ({ stay, setSelectedStay }: any) => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
+      // Store booking intent and redirect to auth
+      sessionStorage.setItem("pendingStayBooking", JSON.stringify(stay));
       toast.error("Please sign in to book a pet stay");
       navigate("/auth", { state: { returnTo: "/pet-airbnb" } });
       return;

@@ -5,21 +5,41 @@ import { MapPin, Phone, Users, Cake, Music, Utensils } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 const PetParties = () => {
   const navigate = useNavigate();
 
-  const handleBooking = async (venueName: string) => {
+  // Check for pending booking after auth
+  useEffect(() => {
+    const checkPendingBooking = async () => {
+      const pendingBooking = sessionStorage.getItem("pendingVenueBooking");
+      if (pendingBooking) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const venue = JSON.parse(pendingBooking);
+          sessionStorage.removeItem("pendingVenueBooking");
+          toast.success(`Booking ${venue.name}...`);
+          // TODO: Navigate to actual booking page when implemented
+        }
+      }
+    };
+    checkPendingBooking();
+  }, [navigate]);
+
+  const handleBooking = async (venue: any) => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
+      // Store booking intent and redirect to auth
+      sessionStorage.setItem("pendingVenueBooking", JSON.stringify(venue));
       toast.error("Please sign in to book a party venue");
       navigate("/auth", { state: { returnTo: "/pet-parties" } });
       return;
     }
 
     // TODO: Navigate to booking page with venue details
-    toast.success(`Booking ${venueName}...`);
+    toast.success(`Booking ${venue.name}...`);
   };
 
   const venues = [
@@ -165,7 +185,7 @@ const PetParties = () => {
                     </div>
                   </div>
 
-                  <Button className="w-full" onClick={() => handleBooking(venue.name)}>
+                  <Button className="w-full" onClick={() => handleBooking(venue)}>
                     <Phone className="w-4 h-4 mr-2" />
                     Book Now
                   </Button>

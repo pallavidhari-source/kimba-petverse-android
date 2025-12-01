@@ -19,6 +19,23 @@ const Adopt = () => {
   
   const defaultImages = [adoptMax, adoptLuna, adoptRocky];
 
+  // Check for pending adoption after auth
+  useEffect(() => {
+    const checkPendingAdoption = async () => {
+      const pendingAdoption = sessionStorage.getItem("pendingAdoption");
+      if (pendingAdoption) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const pet = JSON.parse(pendingAdoption);
+          sessionStorage.removeItem("pendingAdoption");
+          toast.success(`Initiating adoption for ${pet.name}...`);
+          // TODO: Navigate to actual adoption form when implemented
+        }
+      }
+    };
+    checkPendingAdoption();
+  }, [navigate]);
+
   const fetchAdoptionPets = async () => {
     setIsLoading(true);
     try {
@@ -79,17 +96,19 @@ const Adopt = () => {
     }
   };
 
-  const handleAdoption = async (petName: string) => {
+  const handleAdoption = async (pet: any) => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
+      // Store adoption intent and redirect to auth
+      sessionStorage.setItem("pendingAdoption", JSON.stringify(pet));
       toast.error("Please sign in to adopt a pet");
       navigate("/auth", { state: { returnTo: "/adopt" } });
       return;
     }
 
     // TODO: Navigate to adoption application page
-    toast.success(`Starting adoption process for ${petName}...`);
+    toast.success(`Starting adoption process for ${pet.name}...`);
   };
 
   useEffect(() => {
@@ -159,7 +178,7 @@ const Adopt = () => {
                       View Source
                     </Button>
                   )}
-                  <Button className={pet.link ? "" : "flex-1"} onClick={() => handleAdoption(pet.name)}>
+                  <Button className={pet.link ? "" : "flex-1"} onClick={() => handleAdoption(pet)}>
                     <Heart className="h-4 w-4 mr-2" />
                     Adopt
                   </Button>
