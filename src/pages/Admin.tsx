@@ -53,13 +53,42 @@ const Admin = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
+    // Check for error in URL hash (from expired/invalid reset links)
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const errorCode = hashParams.get('error_code');
+    const errorDescription = hashParams.get('error_description');
+    
+    if (errorCode === 'otp_expired' || errorDescription) {
+      toast.error("Password reset link has expired. Please request a new one.");
+      // Clear the hash from URL
+      window.history.replaceState(null, '', window.location.pathname);
+      setShowPasswordReset(false);
+      return;
+    }
+
+    // Check if this is a password reset flow
     const isReset = searchParams.get('reset') === 'true';
+    
     if (isReset) {
-      setShowPasswordReset(true);
+      // Verify user has a valid session before showing reset form
+      validateResetSession();
     } else {
       checkAuth();
     }
   }, [searchParams]);
+
+  const validateResetSession = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      toast.error("Invalid or expired reset link. Please request a new password reset.");
+      setShowPasswordReset(false);
+      return;
+    }
+    
+    // Valid session exists, show the password reset form
+    setShowPasswordReset(true);
+  };
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -245,16 +274,31 @@ const Admin = () => {
 
     setLoading(true);
     try {
+      // First verify we have a session
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        toast.error("Session expired. Please request a new password reset link.");
+        setShowPasswordReset(false);
+        return;
+      }
+
       const { error } = await supabase.auth.updateUser({
         password: newPassword
       });
 
       if (error) throw error;
 
-      toast.success("Password updated successfully!");
+      toast.success("Password updated successfully! Redirecting to login...");
       setShowPasswordReset(false);
-      await checkAuth();
+      setNewPassword("");
+      setConfirmPassword("");
+      
+      // Sign out and redirect to admin login
+      await supabase.auth.signOut();
+      navigate("/admin");
     } catch (error: any) {
+      console.error("Password update error:", error);
       toast.error(error.message || "Failed to update password");
     } finally {
       setLoading(false);
