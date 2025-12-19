@@ -52,17 +52,18 @@ const Cafes = () => {
     return petCafes.filter(v => v.area === selectedArea);
   }, [petCafes, selectedArea]);
 
-  // Fetch pet-friendly cafes from TomTom API
+  // Fetch cafes from TomTom API
   useEffect(() => {
     const fetchPetCafes = async () => {
       try {
         setLoading(true);
-        const query = "pet friendly cafe";
+        // Using "cafe" as TomTom doesn't have specific "pet friendly cafe" category data for Hyderabad
+        const query = "cafe";
         const url = `https://api.tomtom.com/search/2/categorySearch/${encodeURIComponent(query)}.json?key=${TOMTOM_API_KEY}&lat=${HYDERABAD_LAT}&lon=${HYDERABAD_LON}&radius=${SEARCH_RADIUS}&limit=50`;
         
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error("Failed to fetch pet cafes");
+          throw new Error("Failed to fetch cafes");
         }
         
         const data = await response.json();
@@ -70,7 +71,7 @@ const Cafes = () => {
         if (data.results && data.results.length > 0) {
           const cafes: PetCafe[] = data.results.map((result: any) => ({
             id: result.id,
-            name: result.poi?.name || "Pet Cafe",
+            name: result.poi?.name || "Cafe",
             address: result.address?.freeformAddress || result.address?.streetName || "Hyderabad",
             area: result.address?.municipalitySubdivision || result.address?.municipalitySecondarySubdivision || "Hyderabad",
             phone: result.poi?.phone || null,
@@ -80,11 +81,11 @@ const Cafes = () => {
           }));
           setPetCafes(cafes);
         } else {
-          setError("No pet-friendly cafes found in Hyderabad area");
+          setError("No cafes found in Hyderabad area");
         }
       } catch (err) {
-        console.error("Error fetching pet cafes:", err);
-        setError("Failed to load pet cafes. Please try again later.");
+        console.error("Error fetching cafes:", err);
+        setError("Failed to load cafes. Please try again later.");
       } finally {
         setLoading(false);
       }
