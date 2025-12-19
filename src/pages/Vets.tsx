@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState, useMemo } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -29,10 +29,16 @@ const SEARCH_RADIUS = 15000;
 
 const Vets = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [veterinarians, setVeterinarians] = useState<VetClinic[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedArea, setSelectedArea] = useState<string>("all");
+
+  // Reset filter when navigating to this page
+  useEffect(() => {
+    setSelectedArea("all");
+  }, [location.key]);
 
   // Get unique areas from data
   const areas = useMemo(() => {
