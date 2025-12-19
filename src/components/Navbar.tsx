@@ -1,4 +1,4 @@
-import { Menu, User, Wallet, LogOut, Phone, Shield, ChevronDown, Home, PawPrint, ShoppingBag, Stethoscope, Scissors, Coffee, Hotel, Heart, PartyPopper } from "lucide-react";
+import { Menu, User, Wallet, LogOut, Phone, Shield, ChevronDown, Home, PawPrint, ShoppingBag, Stethoscope, Scissors, Coffee, Hotel, Heart, PartyPopper, Footprints } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -255,6 +255,22 @@ export const Navbar = () => {
                         </Link>
                       </NavigationMenuLink>
                     </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          to="/pet-walkers"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+                            <Footprints className="h-4 w-4" />
+                            Pet Walkers
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            Professional dog walking services
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
@@ -324,6 +340,14 @@ export const Navbar = () => {
                 <Link to="/become-host" className={cn("group inline-flex h-10 w-max items-center justify-center rounded-md bg-primary/10 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/20 hover:text-primary focus:bg-primary/20 focus:text-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50")}>
                   <Home className="h-4 w-4 mr-1" />
                   Become Host
+                </Link>
+              </NavigationMenuItem>
+
+              {/* Become Pet Walker */}
+              <NavigationMenuItem>
+                <Link to="/pet-walker-signup" className={cn("group inline-flex h-10 w-max items-center justify-center rounded-md bg-accent/10 px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/20 hover:text-accent focus:bg-accent/20 focus:text-accent focus:outline-none disabled:pointer-events-none disabled:opacity-50")}>
+                  <Footprints className="h-4 w-4 mr-1" />
+                  Become Pet Walker
                 </Link>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -531,6 +555,10 @@ export const Navbar = () => {
                     <Heart className="h-4 w-4" />
                     Pet Memorial
                   </Link>
+                  <Link to="/pet-walkers" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                    <Footprints className="h-4 w-4" />
+                    Pet Walkers
+                  </Link>
                 </div>
               </div>
 
@@ -560,6 +588,14 @@ export const Navbar = () => {
                 <Button className="w-full gap-2" variant="default">
                   <Home className="h-4 w-4" />
                   Become Host
+                </Button>
+              </Link>
+
+              {/* Become Pet Walker */}
+              <Link to="/pet-walker-signup">
+                <Button className="w-full gap-2" variant="outline">
+                  <Footprints className="h-4 w-4" />
+                  Become Pet Walker
                 </Button>
               </Link>
 
