@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin, Star, Phone, Clock, Loader2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MapPin, Star, Phone, Clock, Loader2, Filter } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -11,6 +12,7 @@ interface VetClinic {
   id: string;
   name: string;
   address: string;
+  area: string;
   phone?: string;
   rating?: number;
   distance: number;
@@ -23,13 +25,26 @@ interface VetClinic {
 const TOMTOM_API_KEY = "msge96nOfEpL12iNfj7BDZ9ECfJhy4y1";
 const HYDERABAD_LAT = 17.385044;
 const HYDERABAD_LON = 78.486671;
-const SEARCH_RADIUS = 15000; // 15km radius
+const SEARCH_RADIUS = 15000;
 
 const Vets = () => {
   const navigate = useNavigate();
   const [veterinarians, setVeterinarians] = useState<VetClinic[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedArea, setSelectedArea] = useState<string>("all");
+
+  // Get unique areas from data
+  const areas = useMemo(() => {
+    const uniqueAreas = [...new Set(veterinarians.map(v => v.area).filter(Boolean))];
+    return uniqueAreas.sort();
+  }, [veterinarians]);
+
+  // Filter clinics by area
+  const filteredClinics = useMemo(() => {
+    if (selectedArea === "all") return veterinarians;
+    return veterinarians.filter(v => v.area === selectedArea);
+  }, [veterinarians, selectedArea]);
 
   // Fetch pet clinics from TomTom API
   useEffect(() => {
@@ -37,7 +52,7 @@ const Vets = () => {
       try {
         setLoading(true);
         const query = "veterinary clinic";
-        const url = `https://api.tomtom.com/search/2/categorySearch/${encodeURIComponent(query)}.json?key=${TOMTOM_API_KEY}&lat=${HYDERABAD_LAT}&lon=${HYDERABAD_LON}&radius=${SEARCH_RADIUS}&limit=20`;
+        const url = `https://api.tomtom.com/search/2/categorySearch/${encodeURIComponent(query)}.json?key=${TOMTOM_API_KEY}&lat=${HYDERABAD_LAT}&lon=${HYDERABAD_LON}&radius=${SEARCH_RADIUS}&limit=50`;
         
         const response = await fetch(url);
         if (!response.ok) {
@@ -51,6 +66,7 @@ const Vets = () => {
             id: result.id,
             name: result.poi?.name || "Pet Clinic",
             address: result.address?.freeformAddress || result.address?.streetName || "Hyderabad",
+            area: result.address?.municipalitySubdivision || result.address?.municipalitySecondarySubdivision || "Hyderabad",
             phone: result.poi?.phone || null,
             rating: result.score ? Math.min(5, (result.score / 2)).toFixed(1) : null,
             distance: result.dist ? Math.round(result.dist) : 0,
@@ -139,6 +155,32 @@ const Vets = () => {
 
       <section className="py-16">
         <div className="container mx-auto px-4">
+          {/* Filter Section */}
+          {!loading && !error && veterinarians.length > 0 && (
+            <div className="mb-8 flex items-center gap-4 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Filter className="h-5 w-5 text-muted-foreground" />
+                <span className="font-medium">Filter by Area:</span>
+              </div>
+              <Select value={selectedArea} onValueChange={setSelectedArea}>
+                <SelectTrigger className="w-[220px] bg-background">
+                  <SelectValue placeholder="Select Area" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border shadow-lg z-50">
+                  <SelectItem value="all">All Areas</SelectItem>
+                  {areas.map((area) => (
+                    <SelectItem key={area} value={area}>
+                      {area}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <span className="text-sm text-muted-foreground">
+                Showing {filteredClinics.length} of {veterinarians.length} clinics
+              </span>
+            </div>
+          )}
+
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20">
               <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
@@ -151,7 +193,7 @@ const Vets = () => {
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {veterinarians.map((vet) => (
+              {filteredClinics.map((vet) => (
                 <Card key={vet.id}>
                   <CardHeader>
                     <div className="w-full h-48 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg mb-4 flex items-center justify-center">
@@ -164,6 +206,11 @@ const Vets = () => {
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <MapPin className="h-4 w-4 flex-shrink-0" />
                       <span className="line-clamp-2">{vet.address}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-medium">
+                        {vet.area}
+                      </span>
                     </div>
                     {vet.rating && (
                       <div className="flex items-center gap-2 text-sm">
