@@ -242,22 +242,6 @@ export const Navbar = () => {
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
-                          to="/grooming"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
-                            <Scissors className="h-4 w-4" />
-                            Grooming
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Professional pet grooming
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link
                           to="/pet-cemeteries"
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
