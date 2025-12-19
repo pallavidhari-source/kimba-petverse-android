@@ -32,6 +32,7 @@ import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import PetWalkers from "./pages/PetWalkers";
 import PetWalkerSignup from "./pages/PetWalkerSignup";
+import PetShops from "./pages/PetShops";
 import kimbaLogo from "./assets/kimba-logo.png";
 
 const queryClient = new QueryClient();
@@ -76,6 +77,7 @@ const App = () => (
           <Route path="/adopt" element={<Adopt />} />
           <Route path="/buy-pets" element={<BuyPets />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/pet-shops" element={<PetShops />} />
           <Route path="/ethnic-wear" element={<EthnicWear />} />
           <Route path="/vets" element={<Vets />} />
           <Route path="/book-vet-appointment" element={<BookVetAppointment />} />

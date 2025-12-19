@@ -187,10 +187,26 @@ export const Navbar = () => {
                         >
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <ShoppingBag className="h-4 w-4" />
-                            Pet Shop
+                            Online Shop
                           </div>
                           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                             Products and accessories
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          to="/pet-shops"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+                            <ShoppingBag className="h-4 w-4" />
+                            Pet Shops Near You
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            Find local pet stores
                           </p>
                         </Link>
                       </NavigationMenuLink>
