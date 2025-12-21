@@ -59,17 +59,23 @@ const PetAirbnb = () => {
     checkPendingBooking();
   }, []);
 
-  // Fetch animal shelters from TomTom API
+  // Fetch animal shelters from TomTom Orbis API
   useEffect(() => {
     const fetchPetStays = async () => {
       try {
         setLoading(true);
-        const query = "animal shelter";
-        const url = `https://api.tomtom.com/search/2/categorySearch/${encodeURIComponent(query)}.json?key=${TOMTOM_API_KEY}&lat=${HYDERABAD_LAT}&lon=${HYDERABAD_LON}&radius=${SEARCH_RADIUS}&limit=50`;
+        const query = encodeURIComponent("animal shelter");
+        const url = `https://api.tomtom.com/maps/orbis/places/categorySearch/${query}.json` +
+          `?key=${TOMTOM_API_KEY}` +
+          `&apiVersion=1` +
+          `&geobias=point:${HYDERABAD_LAT},${HYDERABAD_LON}` +
+          `&radius=20000` +
+          `&limit=20` +
+          `&language=en-US`;
         
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error("Failed to fetch pet stays");
+          throw new Error(`HTTP ${response.status}`);
         }
         
         const data = await response.json();
