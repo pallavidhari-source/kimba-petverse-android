@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Star, Calendar, Info, Plus, Phone, ExternalLink } from "lucide-react";
+import { MapPin, Star, Calendar, Info, Plus, Phone, ExternalLink, Filter, Loader2 } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -153,25 +153,35 @@ const PetAirbnb = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           {/* Area Filter */}
-          <div className="flex justify-end mb-6">
-            <Select value={selectedArea} onValueChange={setSelectedArea}>
-              <SelectTrigger className="w-[200px]">
-                <SelectValue placeholder="Filter by Area" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Areas</SelectItem>
-                {areas.map((area) => (
-                  <SelectItem key={area} value={area}>
-                    {area}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {!loading && !error && petStays.length > 0 && (
+            <div className="mb-8 flex items-center gap-4 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Filter className="h-5 w-5 text-muted-foreground" />
+                <span className="font-medium">Filter by Area:</span>
+              </div>
+              <Select value={selectedArea} onValueChange={setSelectedArea}>
+                <SelectTrigger className="w-[220px] bg-background">
+                  <SelectValue placeholder="Filter by Area" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border shadow-lg z-50">
+                  <SelectItem value="all">All Areas</SelectItem>
+                  {areas.map((area) => (
+                    <SelectItem key={area} value={area}>
+                      {area}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <span className="text-sm text-muted-foreground">
+                Showing {filteredStays.length} of {petStays.length} pet stays
+              </span>
+            </div>
+          )}
 
           {loading ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">Loading pet stays...</p>
+            <div className="flex flex-col items-center justify-center py-20">
+              <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+              <p className="text-muted-foreground">Loading pet stays in Hyderabad...</p>
             </div>
           ) : error ? (
             <div className="text-center py-12">
