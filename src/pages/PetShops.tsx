@@ -92,7 +92,9 @@ const PetShops = () => {
   }, []);
 
   const handleViewOnMap = (shop: PetShop) => {
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${shop.position.lat},${shop.position.lon}`;
+    // Use shop name and address for better Google Maps search results
+    const searchQuery = encodeURIComponent(`${shop.name}, ${shop.address}, Hyderabad`);
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
     window.open(mapsUrl, '_blank');
   };
 
