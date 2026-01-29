@@ -238,9 +238,9 @@ const Vets = () => {
                   <CardFooter>
                     <Button 
                       className="w-full"
-                      onClick={() => handleBookAppointment(vet)}
+                      disabled
                     >
-                      Book Appointment
+                      Book Appointment (Coming Soon)
                     </Button>
                   </CardFooter>
                 </Card>
