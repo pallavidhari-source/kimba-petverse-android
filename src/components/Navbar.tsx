@@ -138,7 +138,7 @@ export const Navbar = () => {
                         </Link>
                       </NavigationMenuLink>
                     </li>
-                    <li>
+                    {/* <li>
                       <NavigationMenuLink asChild>
                         <Link to="/adopt" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
@@ -148,7 +148,7 @@ export const Navbar = () => {
                           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Find your forever companion</p>
                         </Link>
                       </NavigationMenuLink>
-                    </li>
+                    </li> */}
                     <li>
                       <NavigationMenuLink asChild>
                         <Link to="/pet-adoption" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
@@ -216,7 +216,7 @@ export const Navbar = () => {
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 bg-card">
-                    <li>
+                    {/* <li>
                       <NavigationMenuLink asChild>
                         <Link to="/vets" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
@@ -226,7 +226,7 @@ export const Navbar = () => {
                           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Expert healthcare for pets</p>
                         </Link>
                       </NavigationMenuLink>
-                    </li>
+                    </li> */}
                     <li>
                       <NavigationMenuLink asChild>
                         <Link to="/vet-finder" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
