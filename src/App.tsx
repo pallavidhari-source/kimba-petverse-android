@@ -42,6 +42,7 @@ import BreedDatabase from "./pages/BreedDatabase";
 import VetFinder from "./pages/VetFinder";
 import Community from "./pages/Community";
 import PetAdoption from "./pages/PetAdoption";
+import AllServices from "./pages/AllServices";
 
 const queryClient = new QueryClient();
 
@@ -115,6 +116,7 @@ const App = () => (
             <Route path="/vet-finder" element={<VetFinder />} />
             <Route path="/community" element={<Community />} />
             <Route path="/pet-adoption" element={<PetAdoption />} />
+            <Route path="/all-services" element={<AllServices />} />
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
