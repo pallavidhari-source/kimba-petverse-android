@@ -35,6 +35,14 @@ import PetWalkerSignup from "./pages/PetWalkerSignup";
 import PetShops from "./pages/PetShops";
 import kimbaLogo from "./assets/kimba-logo.png";
 
+// ✅ NEW FEATURE IMPORTS
+import HealthTracker from "./pages/HealthTracker";
+import FeedingReminders from "./pages/FeedingReminders";
+import BreedDatabase from "./pages/BreedDatabase";
+import VetFinder from "./pages/VetFinder";
+import Community from "./pages/Community";
+import PetAdoption from "./pages/PetAdoption";
+
 const queryClient = new QueryClient();
 
 // Component to handle route changes and dismiss toasts
@@ -73,35 +81,43 @@ const App = () => (
         <Layout>
           <Routes>
             <Route path="/" element={<Index />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/adopt" element={<Adopt />} />
-          <Route path="/buy-pets" element={<BuyPets />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/pet-shops" element={<PetShops />} />
-          <Route path="/ethnic-wear" element={<EthnicWear />} />
-          <Route path="/vets" element={<Vets />} />
-          <Route path="/book-vet-appointment" element={<BookVetAppointment />} />
-          <Route path="/grooming" element={<Grooming />} />
-          <Route path="/cafes" element={<Cafes />} />
-          <Route path="/pet-airbnb" element={<PetAirbnb />} />
-          <Route path="/pet-cemeteries" element={<PetCemeteries />} />
-          <Route path="/pet-parties" element={<PetParties />} />
-          <Route path="/pet-walkers" element={<PetWalkers />} />
-          <Route path="/pet-walker-signup" element={<PetWalkerSignup />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/become-host" element={<BecomeHost />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/register-pet" element={<RegisterPet />} />
-          <Route path="/host-dashboard" element={<HostDashboard />} />
-          <Route path="/user-dashboard" element={<UserDashboard />} />
-          <Route path="/create-pet-stay" element={<CreatePetStay />} />
-          <Route path="/ethnic-wear" element={<EthnicWear />} />
-          <Route path="/product/:handle" element={<ProductDetail />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/adopt" element={<Adopt />} />
+            <Route path="/buy-pets" element={<BuyPets />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/pet-shops" element={<PetShops />} />
+            <Route path="/ethnic-wear" element={<EthnicWear />} />
+            <Route path="/vets" element={<Vets />} />
+            <Route path="/book-vet-appointment" element={<BookVetAppointment />} />
+            <Route path="/grooming" element={<Grooming />} />
+            <Route path="/cafes" element={<Cafes />} />
+            <Route path="/pet-airbnb" element={<PetAirbnb />} />
+            <Route path="/pet-cemeteries" element={<PetCemeteries />} />
+            <Route path="/pet-parties" element={<PetParties />} />
+            <Route path="/pet-walkers" element={<PetWalkers />} />
+            <Route path="/pet-walker-signup" element={<PetWalkerSignup />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/become-host" element={<BecomeHost />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/register-pet" element={<RegisterPet />} />
+            <Route path="/host-dashboard" element={<HostDashboard />} />
+            <Route path="/user-dashboard" element={<UserDashboard />} />
+            <Route path="/create-pet-stay" element={<CreatePetStay />} />
+            <Route path="/product/:handle" element={<ProductDetail />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+
+            {/* ✅ NEW FEATURE ROUTES */}
+            <Route path="/health-tracker" element={<HealthTracker />} />
+            <Route path="/feeding-reminders" element={<FeedingReminders />} />
+            <Route path="/breed-database" element={<BreedDatabase />} />
+            <Route path="/vet-finder" element={<VetFinder />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/pet-adoption" element={<PetAdoption />} />
+
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
       </BrowserRouter>
