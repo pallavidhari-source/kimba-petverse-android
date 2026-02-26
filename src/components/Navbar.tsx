@@ -1,4 +1,4 @@
-import { Menu, User, Wallet, LogOut, Phone, Shield, ChevronDown, Home, PawPrint, ShoppingBag, Stethoscope, Scissors, Coffee, Hotel, Heart, PartyPopper, Footprints } from "lucide-react";
+import { Menu, User, Wallet, LogOut, Phone, Shield, ChevronDown, Home, PawPrint, ShoppingBag, Stethoscope, Scissors, Coffee, Hotel, Heart, PartyPopper, Footprints, Activity, UtensilsCrossed, BookOpen, MapPin, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -60,7 +60,6 @@ export const Navbar = () => {
       
       setIsHost(!!data);
 
-      // Load profile data
       const { data: profileData } = await supabase
         .from("profiles")
         .select("*")
@@ -71,13 +70,10 @@ export const Navbar = () => {
         setProfile(profileData);
       }
 
-      // Load all roles
       const { data: rolesData } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", userId);
-      
-      console.log("Loaded user roles:", rolesData);
       
       if (rolesData) {
         setRoles(rolesData.map(r => r.role));
@@ -91,7 +87,6 @@ export const Navbar = () => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      
       toast.success("Signed out successfully");
       navigate("/");
     } catch (error: any) {
@@ -123,6 +118,7 @@ export const Navbar = () => {
         <div className="hidden items-center gap-4 lg:flex">
           <NavigationMenu>
             <NavigationMenuList>
+
               {/* Pets */}
               <NavigationMenuItem>
                 <NavigationMenuTrigger className="text-sm font-medium">
@@ -133,81 +129,78 @@ export const Navbar = () => {
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 bg-card">
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link
-                          to="/explore"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
+                        <Link to="/explore" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <PawPrint className="h-4 w-4" />
                             Pet Experience
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Spend quality time with pets
-                          </p>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Spend quality time with pets</p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link
-                          to="/adopt"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
+                        <Link to="/adopt" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <Heart className="h-4 w-4" />
                             Adopt a Pet
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Find your forever companion
-                          </p>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Find your forever companion</p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link
-                          to="/buy-pets"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
+                        <Link to="/pet-adoption" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+                            <Heart className="h-4 w-4 text-rose-500" />
+                            🐾 Pet Adoption Listings
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Browse pets needing a home</p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/breed-database" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+                            <BookOpen className="h-4 w-4 text-violet-500" />
+                            🐾 Breed Database
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Explore dog & cat breeds</p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/buy-pets" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <ShoppingBag className="h-4 w-4" />
                             Buy Pets
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Browse pets for sale
-                          </p>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Browse pets for sale</p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link
-                          to="/shop"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
+                        <Link to="/shop" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <ShoppingBag className="h-4 w-4" />
                             Online Shop
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Products and accessories
-                          </p>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Products and accessories</p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link
-                          to="/pet-shops"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
+                        <Link to="/pet-shops" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <ShoppingBag className="h-4 w-4" />
                             Pet Shops Near You
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Find local pet stores
-                          </p>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Find local pet stores</p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
@@ -225,49 +218,78 @@ export const Navbar = () => {
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 bg-card">
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link
-                          to="/vets"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
+                        <Link to="/vets" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <Stethoscope className="h-4 w-4" />
                             Veterinary Care
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Expert healthcare for pets
-                          </p>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Expert healthcare for pets</p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link
-                          to="/pet-cemeteries"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
+                        <Link to="/vet-finder" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+                            <MapPin className="h-4 w-4 text-blue-500" />
+                            🏥 Vet Finder
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Find vets near you by city</p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/health-tracker" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+                            <Activity className="h-4 w-4 text-emerald-500" />
+                            🏥 Health Tracker
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Track vaccinations & vet visits</p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/feeding-reminders" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+                            <UtensilsCrossed className="h-4 w-4 text-orange-500" />
+                            🍽️ Feeding Reminders
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Set meal times & track feeding</p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/pet-cemeteries" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <Heart className="h-4 w-4" />
                             Pet Memorial
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Honor your beloved companions
-                          </p>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Honor your beloved companions</p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link
-                          to="/pet-walkers"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
+                        <Link to="/grooming" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+                            <Scissors className="h-4 w-4" />
+                            Grooming
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Professional pet grooming</p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/pet-walkers" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <Footprints className="h-4 w-4" />
                             Pet Walkers
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Professional dog walking services
-                          </p>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Professional dog walking services</p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
@@ -285,49 +307,45 @@ export const Navbar = () => {
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 bg-card">
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link
-                          to="/pet-airbnb"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
+                        <Link to="/pet-airbnb" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <Hotel className="h-4 w-4" />
                             Kimba Pet Stays
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Pet-friendly accommodations
-                          </p>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Pet-friendly accommodations</p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link
-                          to="/pet-parties"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
+                        <Link to="/pet-parties" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <PartyPopper className="h-4 w-4" />
                             Pet Pawrties
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Celebrate with your pets
-                          </p>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Celebrate with your pets</p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link
-                          to="/cafes"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
+                        <Link to="/cafes" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <Coffee className="h-4 w-4" />
                             Pet Cafes
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Enjoy coffee with furry friends
-                          </p>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Enjoy coffee with furry friends</p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/community" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+                            <MessageCircle className="h-4 w-4 text-pink-500" />
+                            💬 Community Forum
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">Connect with pet lovers</p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
@@ -350,6 +368,7 @@ export const Navbar = () => {
                   Become Pet Walker
                 </Link>
               </NavigationMenuItem>
+
             </NavigationMenuList>
           </NavigationMenu>
 
@@ -398,7 +417,6 @@ export const Navbar = () => {
                           <p className="text-xs text-muted-foreground">{user?.email}</p>
                         </div>
                       </div>
-
                       <div className="space-y-2">
                         {profile?.phone && (
                           <div className="flex items-center gap-2 text-sm">
@@ -406,27 +424,18 @@ export const Navbar = () => {
                             <span>{profile.phone}</span>
                           </div>
                         )}
-                        
                         {roles.length > 0 && (
                           <div className="flex items-center gap-2 text-sm">
                             <Shield className="h-3 w-3 text-muted-foreground" />
                             <div className="flex flex-wrap gap-1">
                               {roles.map((role) => (
-                                <Badge key={role} variant="secondary" className="text-xs capitalize">
-                                  {role}
-                                </Badge>
+                                <Badge key={role} variant="secondary" className="text-xs capitalize">{role}</Badge>
                               ))}
                             </div>
                           </div>
                         )}
                       </div>
-
-                      <Button
-                        onClick={handleSignOut}
-                        variant="destructive"
-                        className="w-full"
-                        size="sm"
-                      >
+                      <Button onClick={handleSignOut} variant="destructive" className="w-full" size="sm">
                         <LogOut className="mr-2 h-3 w-3" />
                         Sign Out
                       </Button>
@@ -466,7 +475,6 @@ export const Navbar = () => {
                       <p className="text-xs text-muted-foreground">{user?.email}</p>
                     </div>
                   </div>
-
                   <div className="space-y-2">
                     {profile?.phone && (
                       <div className="flex items-center gap-2 text-sm">
@@ -474,27 +482,18 @@ export const Navbar = () => {
                         <span>{profile.phone}</span>
                       </div>
                     )}
-                    
                     {roles.length > 0 && (
                       <div className="flex items-center gap-2 text-sm">
                         <Shield className="h-3 w-3 text-muted-foreground" />
                         <div className="flex flex-wrap gap-1">
                           {roles.map((role) => (
-                            <Badge key={role} variant="secondary" className="text-xs capitalize">
-                              {role}
-                            </Badge>
+                            <Badge key={role} variant="secondary" className="text-xs capitalize">{role}</Badge>
                           ))}
                         </div>
                       </div>
                     )}
                   </div>
-
-                  <Button
-                    onClick={handleSignOut}
-                    variant="destructive"
-                    className="w-full"
-                    size="sm"
-                  >
+                  <Button onClick={handleSignOut} variant="destructive" className="w-full" size="sm">
                     <LogOut className="mr-2 h-3 w-3" />
                     Sign Out
                   </Button>
@@ -510,142 +509,130 @@ export const Navbar = () => {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-          <SheetContent className="overflow-y-auto">
-            <div className="flex flex-col gap-6 pt-8">
-              {/* Pets Section */}
-              <div>
-                <h3 className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                  Pets
-                </h3>
-                <div className="flex flex-col gap-2">
-                  <Link to="/explore" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <PawPrint className="h-4 w-4" />
-                    Pet Experience
-                  </Link>
-                  <Link to="/adopt" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <Heart className="h-4 w-4" />
-                    Adopt a Pet
-                  </Link>
-                  <Link to="/buy-pets" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <ShoppingBag className="h-4 w-4" />
-                    Buy Pets
-                  </Link>
-                  <Link to="/shop" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <ShoppingBag className="h-4 w-4" />
-                    Pet Shop
-                  </Link>
+            <SheetContent className="overflow-y-auto">
+              <div className="flex flex-col gap-6 pt-8">
+
+                {/* Pets Section */}
+                <div>
+                  <h3 className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Pets</h3>
+                  <div className="flex flex-col gap-2">
+                    <Link to="/explore" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                      <PawPrint className="h-4 w-4" /> Pet Experience
+                    </Link>
+                    {/* <Link to="/adopt" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors"> */}
+                      {/* <Heart className="h-4 w-4" /> Adopt a Pet */}
+                    {/* </Link> */}
+                    <Link to="/pet-adoption" className="flex items-center gap-2 text-base font-medium hover:text-rose-500 transition-colors">
+                      <Heart className="h-4 w-4 text-rose-500" /> 🐾 Pet Adoption Listings
+                    </Link>
+                    <Link to="/breed-database" className="flex items-center gap-2 text-base font-medium hover:text-violet-600 transition-colors">
+                      <BookOpen className="h-4 w-4 text-violet-500" /> 🐾 Breed Database
+                    </Link>
+                    <Link to="/buy-pets" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                      <ShoppingBag className="h-4 w-4" /> Buy Pets
+                    </Link>
+                    <Link to="/shop" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                      <ShoppingBag className="h-4 w-4" /> Pet Shop
+                    </Link>
+                  </div>
                 </div>
-              </div>
 
-              {/* Services Section */}
-              <div>
-                <h3 className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                  Services
-                </h3>
-                <div className="flex flex-col gap-2">
-                  <Link to="/vets" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <Stethoscope className="h-4 w-4" />
-                    Veterinary Care
-                  </Link>
-                  <Link to="/grooming" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <Scissors className="h-4 w-4" />
-                    Grooming
-                  </Link>
-                  <Link to="/pet-cemeteries" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <Heart className="h-4 w-4" />
-                    Pet Memorial
-                  </Link>
-                  <Link to="/pet-walkers" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <Footprints className="h-4 w-4" />
-                    Pet Walkers
-                  </Link>
+                {/* Services Section */}
+                <div>
+                  <h3 className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Services</h3>
+                  <div className="flex flex-col gap-2">
+                    {/*<Link to="/vets" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                      <Stethoscope className="h-4 w-4" /> Veterinary Care
+                    </Link> */}
+                    <Link to="/vet-finder" className="flex items-center gap-2 text-base font-medium hover:text-blue-600 transition-colors">
+                      <MapPin className="h-4 w-4 text-blue-500" /> 🏥 Vet Finder
+                    </Link>
+                    <Link to="/health-tracker" className="flex items-center gap-2 text-base font-medium hover:text-emerald-600 transition-colors">
+                      <Activity className="h-4 w-4 text-emerald-500" /> 🏥 Health Tracker
+                    </Link>
+                    <Link to="/feeding-reminders" className="flex items-center gap-2 text-base font-medium hover:text-orange-500 transition-colors">
+                      <UtensilsCrossed className="h-4 w-4 text-orange-500" /> 🍽️ Feeding Reminders
+                    </Link>
+                    <Link to="/grooming" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                      <Scissors className="h-4 w-4" /> Grooming
+                    </Link>
+                    <Link to="/pet-cemeteries" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                      <Heart className="h-4 w-4" /> Pet Memorial
+                    </Link>
+                    <Link to="/pet-walkers" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                      <Footprints className="h-4 w-4" /> Pet Walkers
+                    </Link>
+                  </div>
                 </div>
-              </div>
 
-              {/* Stays & Events Section */}
-              <div>
-                <h3 className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                  Stays & Events
-                </h3>
-                <div className="flex flex-col gap-2">
-                  <Link to="/pet-airbnb" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <Hotel className="h-4 w-4" />
-                    Kimba Pet Stays
-                  </Link>
-                  <Link to="/pet-parties" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <PartyPopper className="h-4 w-4" />
-                    Pet Pawrties
-                  </Link>
-                  <Link to="/cafes" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
-                    <Coffee className="h-4 w-4" />
-                    Pet Cafes
-                  </Link>
+                {/* Stays & Events Section */}
+                <div>
+                  <h3 className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Stays & Events</h3>
+                  <div className="flex flex-col gap-2">
+                    <Link to="/pet-airbnb" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                      <Hotel className="h-4 w-4" /> Kimba Pet Stays
+                    </Link>
+                    <Link to="/pet-parties" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                      <PartyPopper className="h-4 w-4" /> Pet Pawrties
+                    </Link>
+                    <Link to="/cafes" className="flex items-center gap-2 text-base font-medium hover:text-primary transition-colors">
+                      <Coffee className="h-4 w-4" /> Pet Cafes
+                    </Link>
+                    <Link to="/community" className="flex items-center gap-2 text-base font-medium hover:text-pink-500 transition-colors">
+                      <MessageCircle className="h-4 w-4 text-pink-500" /> 💬 Community Forum
+                    </Link>
+                  </div>
                 </div>
-              </div>
 
-              {/* Become Host */}
-              <Link to="/become-host">
-                <Button className="w-full gap-2" variant="default">
-                  <Home className="h-4 w-4" />
-                  Become Host
-                </Button>
-              </Link>
-
-              {/* Become Pet Walker */}
-              <Link to="/pet-walker-signup">
-                <Button className="w-full gap-2" variant="outline">
-                  <Footprints className="h-4 w-4" />
-                  Become Pet Walker
-                </Button>
-              </Link>
-
-              {/* User Actions */}
-              {user && (
-                <Link to="/wallet">
-                  <Button variant="outline" className="w-full gap-2">
-                    <Wallet className="h-4 w-4" />
-                    Wallet
+                {/* Become Host */}
+                <Link to="/become-host">
+                  <Button className="w-full gap-2" variant="default">
+                    <Home className="h-4 w-4" /> Become Host
                   </Button>
                 </Link>
-              )}
-              
-              {user ? (
-                <>
-                  {isHost ? (
-                    <Link to="/host-dashboard">
-                      <Button variant="outline" className="w-full">
-                        Host Dashboard
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Link to="/user-dashboard">
-                      <Button variant="outline" className="w-full">
-                        My Dashboard
-                      </Button>
-                    </Link>
-                  )}
-                  <Link to="/profile">
-                    <Button variant="outline" className="w-full">
-                      Profile
+
+                {/* Become Pet Walker */}
+                <Link to="/pet-walker-signup">
+                  <Button className="w-full gap-2" variant="outline">
+                    <Footprints className="h-4 w-4" /> Become Pet Walker
+                  </Button>
+                </Link>
+
+                {/* User Actions */}
+                {user && (
+                  <Link to="/wallet">
+                    <Button variant="outline" className="w-full gap-2">
+                      <Wallet className="h-4 w-4" /> Wallet
                     </Button>
                   </Link>
-                  <Button
-                    onClick={handleSignOut}
-                    variant="destructive"
-                    className="w-full gap-2"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Sign Out
-                  </Button>
-                </>
-              ) : (
-                <Link to="/auth">
-                  <Button className="w-full">Sign In</Button>
-                </Link>
-              )}
-            </div>
-          </SheetContent>
-        </Sheet>
+                )}
+                
+                {user ? (
+                  <>
+                    {isHost ? (
+                      <Link to="/host-dashboard">
+                        <Button variant="outline" className="w-full">Host Dashboard</Button>
+                      </Link>
+                    ) : (
+                      <Link to="/user-dashboard">
+                        <Button variant="outline" className="w-full">My Dashboard</Button>
+                      </Link>
+                    )}
+                    <Link to="/profile">
+                      <Button variant="outline" className="w-full">Profile</Button>
+                    </Link>
+                    <Button onClick={handleSignOut} variant="destructive" className="w-full gap-2">
+                      <LogOut className="h-4 w-4" /> Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <Link to="/auth">
+                    <Button className="w-full">Sign In</Button>
+                  </Link>
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </nav>
