@@ -229,6 +229,22 @@ export const Navbar = () => {
                     </li> */}
                     <li>
                       <NavigationMenuLink asChild>
+                        <Link
+                          to="/all-services#veterinary-diagnostics"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+                            <Stethoscope className="h-4 w-4 text-lime-500" />
+                            🧪 Vet Diagnostics
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            Veterinary diagnostics lookup & info
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
                         <Link to="/vet-finder" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                           <div className="flex items-center gap-2 text-sm font-medium leading-none">
                             <MapPin className="h-4 w-4 text-blue-500" />

@@ -1,0 +1,24 @@
+-- Note: Admin password cannot be set directly via SQL migrations in Supabase
+-- This file documents the admin setup process
+
+-- TO SET ADMIN PASSWORD (pallavidhari@gmail.com):
+-- 
+-- Option 1: Via Supabase Dashboard
+-- 1. Go to Supabase Dashboard > Authentication > Users
+-- 2. Find "pallavidhari@gmail.com" user
+-- 3. Click the user row to expand details
+-- 4. Click "Reset Password" or use the Actions menu
+-- 5. Set password to: 123456
+--
+-- Option 2: Via Supabase Admin API (Node.js)
+-- Run this command in your terminal after installing @supabase/supabase-js:
+-- npx ts-node -e "
+--   import { createClient } from '@supabase/supabase-js';
+--   const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SERVICE_ROLE_KEY');
+--   supabase.auth.admin.updateUserById('USER_ID', { password: '123456' })
+--     .then(() => console.log('Password updated'))
+--     .catch(e => console.error(e));
+-- "
+--
+-- Replace YOUR_SUPABASE_URL, YOUR_SERVICE_ROLE_KEY, and USER_ID with actual values
+-- USER_ID can be found in the users table or from auth.users query

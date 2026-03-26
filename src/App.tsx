@@ -34,6 +34,9 @@ import PetWalkers from "./pages/PetWalkers";
 import PetWalkerSignup from "./pages/PetWalkerSignup";
 import PetShops from "./pages/PetShops";
 import kimbaLogo from "./assets/kimba-logo.png";
+import VetDiagnosticsHub from '@/pages/VetDiagnostics';
+import DiagnosticTests from '@/pages/VetDiagnostics/Tests';
+import DiagnosticCenters from '@/pages/VetDiagnostics/Centers';
 
 // ✅ NEW FEATURE IMPORTS
 import HealthTracker from "./pages/HealthTracker";
@@ -117,6 +120,10 @@ const App = () => (
             <Route path="/community" element={<Community />} />
             <Route path="/pet-adoption" element={<PetAdoption />} />
             <Route path="/all-services" element={<AllServices />} />
+
+            <Route path="/vet-diagnostics" element={<VetDiagnosticsHub />} />
+            <Route path="/vet-diagnostics/tests" element={<DiagnosticTests />} />
+            <Route path="/vet-diagnostics/centers" element={<DiagnosticCenters />} />
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

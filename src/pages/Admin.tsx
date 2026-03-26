@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { Navbar } from "@/components/Navbar";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -234,11 +235,6 @@ const Admin = () => {
       return;
     }
 
-    if (resetEmail.toLowerCase().trim() !== 'pallavidhari@gmail.com') {
-      toast.error("Only admin accounts can reset password here");
-      return;
-    }
-
     setLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
@@ -418,7 +414,7 @@ const Admin = () => {
                 <Input
                   id="reset-email"
                   type="email"
-                  placeholder="pallavidhari@gmail.com"
+                  placeholder="Enter your email"
                   value={resetEmail}
                   onChange={(e) => setResetEmail(e.target.value)}
                 />
@@ -446,8 +442,9 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="container mx-auto">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="container mx-auto p-8">
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
           <Button variant="outline" onClick={handleSignOut}>

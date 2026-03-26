@@ -48,13 +48,6 @@ const Auth = () => {
       const validatedData = signUpSchema.parse(rawData);
       const { email, password, fullName, phone } = validatedData;
 
-      // Check if this is an admin email - admins cannot sign up through regular auth
-      if (email === 'pallavidhari@gmail.com') {
-        toast.error("Admin accounts must be created through /admin");
-        setLoading(false);
-        navigate("/admin");
-        return;
-      }
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -123,13 +116,6 @@ const Auth = () => {
       const validatedData = signInSchema.parse(rawData);
       const { email, password } = validatedData;
 
-      // Check if this is an admin email - admins must use /admin
-      if (email === 'pallavidhari@gmail.com') {
-        toast.error("Admin accounts must sign in through /admin");
-        setLoading(false);
-        navigate("/admin");
-        return;
-      }
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,

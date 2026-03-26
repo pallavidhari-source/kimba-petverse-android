@@ -1,0 +1,3 @@
+rootProject.name = "kimba-petverse-android"
+
+include ':app'

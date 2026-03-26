@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -50,8 +51,9 @@ export default function PetCemeteries() {
   const yearsLived = (dob: string, dop: string) => { if (!dob || !dop) return null; const years = Math.floor((new Date(dop).getTime() - new Date(dob).getTime()) / (365.25 * 24 * 3600 * 1000)); return years > 0 ? `${years} year${years > 1 ? "s" : ""}` : null; };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50 p-4 pb-20">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50">
+      <Navbar />
+      <div className="max-w-2xl mx-auto p-4 pb-20">
         <div className="text-center mb-6"><h1 className="text-2xl font-bold text-gray-900">🕊️ Pet Cemeteries & Memorials</h1><p className="text-sm text-gray-500 mt-1">Honoring our beloved companions</p></div>
 
         <div className="flex gap-2 mb-4">
